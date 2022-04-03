@@ -31,7 +31,7 @@ public class Game {
     private Deck deck;
     private Player playerMadeLastTrick;
     private Integer amountOfCardsToDeal=4;
-    private Integer pointsToReach = 51; //TODO: Implement an outer game loop, until points are reached at the end of an outer loop.
+    private Integer pointsToReach = 51;
 
     public Game(){
       players = new ArrayList<>(0);
@@ -188,6 +188,7 @@ public class Game {
     public void setPlayerMadeLastTrick(Player player){
         playerMadeLastTrick = player;
     }
+    public Player getPlayerMadeLastTrick(){return playerMadeLastTrick;}
 
     public void setCardsPoints(){
       Integer amountOfCards = deck.getDecSize();
@@ -227,5 +228,13 @@ public class Game {
             }
         }
         return false;
+    }
+
+    public void setPointsToReach(Integer pointsToReach){
+        this.pointsToReach = pointsToReach;
+    }
+
+    public Integer getPointsToReach(){
+        return pointsToReach;
     }
 }

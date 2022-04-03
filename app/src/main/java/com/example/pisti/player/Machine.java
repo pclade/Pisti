@@ -36,18 +36,30 @@ public class Machine extends Player {
 
     //Strategy: Play the most played card already, to avoid a trick or pisti.
     private Card playMostPlayedCard() {
-        Integer numberOfTimesPlayed = 0;
+        Integer indexOfMaxPlayedCard=0;
+        ArrayList<Integer> numberOfTimesPlayed;
+
+        numberOfTimesPlayed = new ArrayList<Integer>();
         Card cardToPlay = null;
         for (Integer i = 0; i < getHand().size(); i++) {
             Card card = getHand().get(i);
-            if ((card != null) && (numberOfTimesPlayed < getAmountOfCardNameInMemory(card))) {
-                setPlayedCardInHand(i);
-                cardToPlay = card;
-                setPlayedCard(cardToPlay);
-                return cardToPlay;
+            if((card != null) && (card.getName() != "J")){
+                Integer j = getAmountOfCardNameInMemory(card);
+                numberOfTimesPlayed.add(j);
+                for (Integer m = 0; m < numberOfTimesPlayed.size(); m++) {
+                    if (numberOfTimesPlayed.get(m) > numberOfTimesPlayed.get(indexOfMaxPlayedCard)) {
+                        indexOfMaxPlayedCard = m;
+                    }
+                }
+            }
+            else{
+                numberOfTimesPlayed.add(-1);
             }
         }
-        return null;
+        setPlayedCardInHand(indexOfMaxPlayedCard);
+        cardToPlay = getHand().get(indexOfMaxPlayedCard);
+        setPlayedCard(cardToPlay);
+        return cardToPlay;
     }
 
     private Card playNextBestCard(){

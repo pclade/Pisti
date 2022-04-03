@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">Pisti</string>
+    <string name="dialog_title">"Settings"></string>
+    <string name="dialog_message">"Hallo"></string>
+    <string name="cancel">"Cancel"></string>
+    <string name="ok">"Ok"></string>
+    <string name="preference_file_key">"settings.xml"</string>
+    <string name="player_name">"Human"</string>
+    <string name="max_51">"51"</string>
+    <string name="max_101">"101"</string>
+    <string name="max_151">"151"</string>
 </resources>
