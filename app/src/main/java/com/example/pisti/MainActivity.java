@@ -8,8 +8,10 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.app.Application;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -59,6 +61,12 @@ public class MainActivity extends AppCompatActivity{
     AnimatorListenerAdapter animatorListenerAdapter;
     AnimatorListenerAdapter animatorListenerAdapterM;
 
+    Button button_points;
+    Button button_newgame;
+    Button button_exit;
+
+    TextView textPisti;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,21 +80,38 @@ public class MainActivity extends AppCompatActivity{
         RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         lp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
 
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        Integer layoutWidth = size.x-100;
+
         ImageView iv;
 
         iv = (ImageView)findViewById(R.id.iv_card_0);cardResourcesP1.add(iv);
+        Integer originalWidth = iv.getLayoutParams().width;
+        iv.requestLayout();
+        iv.getLayoutParams().width= layoutWidth / 4;
+        iv.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+
         iv = (ImageView)findViewById(R.id.iv_card_1);cardResourcesP1.add(iv);
+        iv.requestLayout();iv.getLayoutParams().width= layoutWidth / 4;iv.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
         iv = (ImageView)findViewById(R.id.iv_card_2);cardResourcesP1.add(iv);
+        iv.requestLayout();iv.getLayoutParams().width= layoutWidth / 4;iv.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
         iv = (ImageView)findViewById(R.id.iv_card_3);cardResourcesP1.add(iv);
+        iv.requestLayout();iv.getLayoutParams().width= layoutWidth / 4;iv.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
 
         for (int i=0;i<4;i++){
             cardResourcesP1.get(i).setOnClickListener(clickListener);
         }
 
         iv = (ImageView)findViewById(R.id.iv_card_back_0);cardResourcesP2.add(iv);
+        iv.requestLayout();iv.getLayoutParams().width= layoutWidth / 4;iv.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
         iv = (ImageView)findViewById(R.id.iv_card_back_1);cardResourcesP2.add(iv);
+        iv.requestLayout();iv.getLayoutParams().width= layoutWidth / 4;iv.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
         iv = (ImageView)findViewById(R.id.iv_card_back_2);cardResourcesP2.add(iv);
+        iv.requestLayout();iv.getLayoutParams().width= layoutWidth / 4;iv.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
         iv = (ImageView)findViewById(R.id.iv_card_back_3);cardResourcesP2.add(iv);
+        iv.requestLayout();iv.getLayoutParams().width= layoutWidth / 4;iv.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
 
         // Create game objects
         game = new Game();
@@ -107,6 +132,9 @@ public class MainActivity extends AppCompatActivity{
         guiTable.setContext(getApplicationContext());
         guiTable.createView();
         guiTable.setImageTable(findViewById(R.id.iv_table_0));
+        guiTable.imageTable.requestLayout();
+        guiTable.imageTable.getLayoutParams().width= layoutWidth / 4;
+        guiTable.imageTable.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
 
         // Player 1
         player1.setName("Senol");
@@ -136,12 +164,23 @@ public class MainActivity extends AppCompatActivity{
         game.addCardToMemoryOfPlayers(table.getTheTopCard());
         // Table has 4 cards dealt, but shows only the last dealt card;
         deal();
+/*
+        buttonPisti = findViewById(R.id.pisti);
+        buttonPisti.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                buttonPisti.animate().alpha(0).setDuration(2000);
+            }
+        });
+*/
+        textPisti = (TextView)findViewById(R.id.pisti);
 
-        final Button button = findViewById(R.id.points);
-        button.setOnClickListener(new View.OnClickListener() {
+
+        button_points = findViewById(R.id.points);
+        button_points.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 //button.setVisibility(View.VISIBLE);
-                button.animate().alpha(0).setDuration(2000).withEndAction(new Runnable(){
+                button_points.animate().alpha(0).setDuration(2000).withEndAction(new Runnable(){
                     @Override
                     public void run(){
                         //button.setVisibility(View.GONE);
@@ -157,6 +196,41 @@ public class MainActivity extends AppCompatActivity{
                         // Every Player memorizes the top card on the table
                         game.addCardToMemoryOfPlayers(table.getTheTopCard());
                         deal();// Code here executes on main thread after user presses button
+                    }
+                });
+            }
+        });
+
+        button_newgame = findViewById(R.id.new_game);
+        button_newgame.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                button_exit.animate().alpha(0).setDuration(2000);
+                button_newgame.animate().alpha(0).setDuration(2000).withEndAction(new Runnable(){
+                    @Override
+                    public void run(){
+                        game.setPlayerMadeLastTrick(null);
+                        deck.createCards();
+                        guiDeck.createCards(getApplicationContext(), deck);
+                        deck.shuffleDeck();
+                        game.setCardsPoints();
+                        game.dealCards(table);
+                        table.setTopCardOnTable(table.getTheTopCard());
+                        guiTable.showCard(table.getTheTopCardsId(), guiDeck, deck);
+                        // Every Player memorizes the top card on the table
+                        game.addCardToMemoryOfPlayers(table.getTheTopCard());
+                        deal();// Code here executes on main thread after user presses button
+                    }
+                });
+            }
+        });
+
+        button_exit = findViewById(R.id.exit);
+        button_exit.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                button_exit.animate().alpha(0).setDuration(2000).withEndAction(new Runnable(){
+                    @Override
+                    public void run(){
+                        System.exit(0);
                     }
                 });
             }
@@ -208,7 +282,7 @@ public class MainActivity extends AppCompatActivity{
         if(playedCard==null)
             return;
         cardNr = player2.getPlayedCardNrInHand();
-        guiPlayer2.showCard(playedCard.getCardNumber(), guiDeck, deck);
+        guiPlayer2.showCard(cardNr, playedCard.getCardNumber(), guiDeck, deck);
 
         guiPlayer2.initAnimation(guiPlayer2.cardImages.get(cardNr), guiTable.imageTable);
         guiPlayer2.addListener(animatorListenerAdapterM);
@@ -242,14 +316,28 @@ public class MainActivity extends AppCompatActivity{
             game.cleanUp(table);
             guiTable.imageTable.setImageResource(android.R.color.transparent);
             player1.calcCardPoints();
-            // Show Points
-            Button button;
-            button = (Button) findViewById(R.id.points);
             player2.calcCardPoints();
-            button.setAlpha(1.0f);
-            button.setText("P1: "+player1.getPoints()+", P2: "+player2.getPoints());
-            button.setVisibility(View.VISIBLE);
-            game.cleanMemories();
+            if(game.maxPointsReached()) {
+                button_newgame = (Button) findViewById(R.id.new_game);
+                button_newgame.setAlpha(1.0f);
+                button_newgame.setText("YOU: " + player1.getPoints() + ", ME: " + player2.getPoints() + "\n Click for new game");
+                button_newgame.setVisibility(View.VISIBLE);
+
+                button_exit = (Button) findViewById(R.id.exit);
+                button_exit.setAlpha(1.0f);
+                button_exit.setVisibility(View.VISIBLE);
+
+                game.cleanMemories();
+                game.cleanPoints();
+            }
+            else {
+                // Show Points
+                button_points = (Button) findViewById(R.id.points);
+                button_points.setAlpha(1.0f);
+                button_points.setText("YOU: " + player1.getPoints() + ", ME: " + player2.getPoints()+"\n Click for continue");
+                button_points.setVisibility(View.VISIBLE);
+                game.cleanMemories();
+            }
         }
     }
 
@@ -265,6 +353,7 @@ public class MainActivity extends AppCompatActivity{
                 player.addPoints(10);
                 game.setPlayerMadeLastTrick(player);
                 //Animation of trick
+                guiTable.pistiAnimation(textPisti);
                 if(player==player1) {
                     guiTable.cardAnimation(1000);
                 }else{

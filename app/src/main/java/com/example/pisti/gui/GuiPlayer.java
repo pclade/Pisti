@@ -41,6 +41,8 @@ public class GuiPlayer {
         for(Integer i=0; i<amountOfCards;i++) {
             Integer cardNrInHand = hand.get(i).getCardNumber();
             ImageView ivOfCardInHand = cardImages.get(i);
+            //DEBUG:
+            //hideCards = false;
             if(hideCards==true){
                 ivOfCardInHand.setImageResource(R.drawable.red_card_back);
             }else {
@@ -65,9 +67,9 @@ public class GuiPlayer {
     public void showCard(Integer cardNr, GuiDeck guiDeck, ImageView imageTable){
     }
 
-    public void showCard(Integer cardNr, GuiDeck guiDeck, Deck deck) {
-        //TODO: if the played card is hidden, then show its real image before playing the card.
-        //      It's so possible to see the real image during the animation sequence.
+    public void showCard(Integer cardNrInHand, Integer cardNr, GuiDeck guiDeck, Deck deck) {
+        ImageView ivOfCardInHand = cardImages.get(cardNrInHand);
+        ivOfCardInHand.setImageResource(guiDeck.getCardID(cardNr, deck));
     }
 
 

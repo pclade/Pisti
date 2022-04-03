@@ -108,6 +108,10 @@ public class Player {
         return points;
     }
 
+    public void setPoints(Integer points) {
+        this.points=points;
+    }
+
     public void calcCardPoints() {
         for (Integer i = 0; i < winnerCards.size(); i++) {
             Card card = winnerCards.get(i);
@@ -124,16 +128,6 @@ public class Player {
 
     }
 
-    /*
-        public Card play(Gui gui, Card topCardOnTable){
-            // Read players card choice
-            String cardNr = gui.getInput();
-            Integer cardInHand = Integer.parseInt(cardNr);
-            // Play card
-            Card playedCard = hand.get(cardInHand);
-            return playCard(playedCard);
-        }
-     */
     public Card play(Integer cardInHand, Card topCardOnTable) {
         // Play card
         setPlayedCardInHand(cardInHand);

@@ -14,19 +14,18 @@
         android:layout_height="125dp"
         android:layout_centerInParent="true"
         android:layout_marginStart="0dp"
-        android:src="@drawable/red_card_back" />
+        android:src="@drawable/red_card_back"/>
 
     <ImageView
         android:id="@+id/iv_table"
-        android:layout_width="370dp"
-        android:layout_height="666dp" />
+        android:layout_width="3700dp"
+        android:layout_height="6666dp" />
 
     <ImageView
         android:id="@+id/iv_card_0"
         android:layout_width="92dp"
         android:layout_height="125dp"
         android:layout_alignParentBottom="true"
-        android:scaleType="fitStart"
         android:src="@drawable/red_card_back" />
 
     <ImageView
@@ -90,8 +89,6 @@
         android:layout_alignParentTop="true"
         android:layout_marginStart="0dp"
         android:src="@drawable/red_card_back" />
-
-
     <Button
         android:id="@+id/points"
         android:layout_width="181dp"
@@ -102,4 +99,37 @@
         android:textAlignment="center"
         android:visibility="gone"
         />
+    <TextView
+        android:id="@+id/pisti"
+        android:layout_width="160dp"
+        android:layout_height="80dp"
+        android:layout_centerInParent="true"
+        android:text="PiSTi"
+        android:textStyle="bold"
+        android:textSize="50dp"
+        android:textColor="@color/teal_700"
+        android:background="@color/black"
+        android:textAlignment="center"
+        android:visibility="gone"
+        />
+
+    <Button
+        android:id="@+id/new_game"
+        android:layout_width="160dp"
+        android:layout_height="81dp"
+        android:layout_centerInParent="true"
+        android:layout_alignLeft="@id/iv_table"
+        android:text="NEW GAME"
+        android:visibility="gone"
+        android:textStyle="bold" />
+    <Button
+        android:id="@+id/exit"
+        android:layout_width="160dp"
+        android:layout_height="81dp"
+        android:layout_centerInParent="true"
+        android:layout_alignRight="@id/iv_table"
+        android:text="EXIT"
+        android:visibility="gone"
+        android:textStyle="bold" />
+
 </RelativeLayout>

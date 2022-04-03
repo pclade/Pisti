@@ -5,9 +5,13 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
+import android.os.CountDownTimer;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.example.pisti.R;
 import com.example.pisti.deck.Card;
@@ -15,6 +19,8 @@ import com.example.pisti.deck.Deck;
 
 import java.lang.annotation.IncompleteAnnotationException;
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class GuiTable {
 
@@ -78,5 +84,18 @@ public class GuiTable {
         cardPlayer.play(yAnim);
         cardPlayer.setDuration(500);
         cardPlayer.start();
+    }
+
+    public void pistiAnimation(TextView view){
+        view.setVisibility(View.VISIBLE);
+        CountDownTimer timer = new CountDownTimer(500, 500) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+            }
+            @Override
+            public void onFinish() {
+                view.setVisibility(View.GONE); //(or GONE)
+            }
+        }.start();
     }
 }

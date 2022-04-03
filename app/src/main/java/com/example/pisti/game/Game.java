@@ -176,6 +176,13 @@ public class Game {
             player.cleanMemories();
         }
     }
+    public void cleanPoints(){
+        Integer amountOfPlayers = players.size();
+        for(Integer i=0; i< amountOfPlayers; i++) {
+            Player player = players.get(i);
+            player.setPoints(0);
+        }
+   }
 
 
     public void setPlayerMadeLastTrick(Player player){
@@ -209,5 +216,16 @@ public class Game {
             Player player = players.get(i);
             player.addCardToMemory(card);
         }
+    }
+
+    public boolean maxPointsReached(){
+        Integer amountOfPlayers = players.size();
+        for(Integer i=0; i< amountOfPlayers; i++) {
+            Player player = players.get(i);
+            if(player.getPoints() >= pointsToReach){
+                return true;
+            }
+        }
+        return false;
     }
 }
