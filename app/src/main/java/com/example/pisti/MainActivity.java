@@ -158,6 +158,7 @@ public class MainActivity extends AppCompatActivity{
         guiPlayer1.setImageViewFromResources(cardResourcesP1);
 
         // Player 2
+        player2.setName(player1.getName());
         game.addPlayer(player2);
         guiPlayer2.setImageViewFromResources(cardResourcesP2);
         // Table
@@ -181,66 +182,8 @@ public class MainActivity extends AppCompatActivity{
         // Table has 4 cards dealt, but shows only the last dealt card;
         deal();
         readPreferences();
-/*
-        buttonPisti = findViewById(R.id.pisti);
-        buttonPisti.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                buttonPisti.animate().alpha(0).setDuration(2000);
-            }
-        });
-*/
         textPisti = (TextView)findViewById(R.id.pisti);
 
-/*
-        button_points = findViewById(R.id.points);
-        button_points.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                //button.setVisibility(View.VISIBLE);
-                button_points.animate().alpha(0).setDuration(2000).withEndAction(new Runnable(){
-                    @Override
-                    public void run(){
-                        nextRound();
-                    }
-                });
-            }
-        });
-
-        button_newgame = findViewById(R.id.new_game);
-        button_newgame.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                button_exit.animate().alpha(0).setDuration(2000);
-                button_newgame.animate().alpha(0).setDuration(2000).withEndAction(new Runnable(){
-                    @Override
-                    public void run(){
-                        game.setPlayerMadeLastTrick(null);
-                        deck.createCards();
-                        guiDeck.createCards(getApplicationContext(), deck);
-                        deck.shuffleDeck();
-                        game.setCardsPoints();
-                        game.dealCards(table);
-                        table.setTopCardOnTable(table.getTheTopCard());
-                        guiTable.showCard(table.getTheTopCardsId(), guiDeck, deck);
-                        // Every Player memorizes the top card on the table
-                        game.addCardToMemoryOfPlayers(table.getTheTopCard());
-                        deal();// Code here executes on main thread after user presses button
-                    }
-                });
-            }
-        });
-
-        button_exit = findViewById(R.id.exit);
-        button_exit.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                button_exit.animate().alpha(0).setDuration(2000).withEndAction(new Runnable(){
-                    @Override
-                    public void run(){
-                        System.exit(0);
-                    }
-                });
-            }
-        });
-*/
         animatorListenerAdapter = new AnimatorListenerAdapter() {
             public void onAnimationEnd(Animator animation){
                 guiPlayer1.restoreCardPositions();
@@ -319,26 +262,18 @@ public class MainActivity extends AppCompatActivity{
             }
         }
         else{
-            // Animate Card to the player with last Tick
-            /*
-            if(game.getPlayerMadeLastTrick() == player1){
-                guiTable.cardAnimation(1000);
-            }else{
-                guiTable.cardAnimation(-1000);
-            }
-*/
             game.cleanUp(table);
             guiTable.imageTable.setImageResource(android.R.color.transparent);
             player1.calcCardPoints();
             player2.calcCardPoints();
             String strScore;
-            strScore = player1.getName() + ": "+player1.getPoints()+ "\n" +
-                    player2.getName() + ": "+player2.getPoints()+ "\n";
+            game.setTrickCount(0);
+            strScore = player1.getName() + ", total points: "+player1.getPoints()+ "\n" +
+                       "Points: "+ player1.getCardsWithPointsString() + "\n" +
+                        "\n"+
+                       player2.getName() + ", total points: "+player2.getPoints()+ "\n" +
+                       "Points: "+ player2.getCardsWithPointsString() + "\n";
             if(game.maxPointsReached()) {
-                //button_newgame = (Button) findViewById(R.id.new_game);
-                //button_newgame.setAlpha(1.0f);
-
-
                 AlertDialog builder = new AlertDialog.Builder(this)
                 .setMessage(strScore).setTitle("SCORE")
                 .setCancelable(false)
@@ -354,19 +289,6 @@ public class MainActivity extends AppCompatActivity{
                         System.exit(0);
                     }
                 }).show();
-/*
-                GuiDialogContinue guiDialogContinue = new GuiDialogContinue();
-                guiDialogContinue.scoreString = player1.getName() + ": "+player1.getPoints()+ "\n" +
-                                                player2.getName() + ": "+player2.getPoints()+ "\n" +
-                                                "Click CONTINUE for new game";
-
-                button_newgame.setText("YOU: " + player1.getPoints() + ", ME: " + player2.getPoints() + "\n Click for new game");
-                button_newgame.setVisibility(View.VISIBLE);
-
-                button_exit = (Button) findViewById(R.id.exit);
-                button_exit.setAlpha(1.0f);
-                button_exit.setVisibility(View.VISIBLE);
-*/
                 game.cleanMemories();
                 game.cleanPoints();
             }
@@ -381,10 +303,6 @@ public class MainActivity extends AppCompatActivity{
                         nextRound();
                     }
                 }).show();
-//                button_points = (Button) findViewById(R.id.points);
-//                button_points.setAlpha(1.0f);
-//                button_points.setText("YOU: " + player1.getPoints() + ", ME: " + player2.getPoints()+"\n Click for continue");
-//                button_points.setVisibility(View.VISIBLE);
                 game.cleanMemories();
             }
         }
@@ -397,6 +315,7 @@ public class MainActivity extends AppCompatActivity{
         // Check game Rules, if it's a trick.
         if(!game.isTableClean(table)){
             if(game.isItAPisti(table)) {
+                player.incCountOfPisti();
                 gui.displayPisti();
                 player.addToWinner(table);
                 player.addPoints(10);
@@ -411,6 +330,23 @@ public class MainActivity extends AppCompatActivity{
             }
             else if(game.isItATrick(table)){
                 //semaphoreTrick = true;
+                if(game.getTrickCount()==0) {
+                    game.setTrickCount(1);
+                    if (player == player1) {
+                        //It's the first trick, show hidden cards to player1
+                        String strHiddenCardsOnTable;
+                        strHiddenCardsOnTable = table.getHiddenCardsString();
+                        AlertDialog builder = new AlertDialog.Builder(this)
+                                .setMessage(strHiddenCardsOnTable).setTitle("HIDDEN CARDS")
+                                //.setCancelable(false)
+                                .setPositiveButton("CLOSE", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        // DO NOTHING
+                                    }
+                                }).show();
+                    }
+                }
                 gui.displayItsATrick();
                 player.addToWinner(table);
                 game.setPlayerMadeLastTrick(player);
@@ -423,6 +359,7 @@ public class MainActivity extends AppCompatActivity{
             }
             else if(game.finished()){
                 // Animate Card to the player with last Tick
+                game.setTrickCount(1);
                 if(game.getPlayerMadeLastTrick() == player1){
                     guiTable.cardAnimation(1000);
                 }else{
@@ -434,6 +371,7 @@ public class MainActivity extends AppCompatActivity{
 
     public void nextRound(){
         game.setPlayerMadeLastTrick(null);
+        game.setTrickCount(0);
         deck.createCards();
         guiDeck.createCards(getApplicationContext(), deck);
         deck.shuffleDeck();
@@ -448,6 +386,7 @@ public class MainActivity extends AppCompatActivity{
 
     public void newGame(){
         game.setPlayerMadeLastTrick(null);
+        game.setTrickCount(0);
         deck.createCards();
         guiDeck.createCards(getApplicationContext(), deck);
         deck.shuffleDeck();
@@ -472,7 +411,7 @@ public class MainActivity extends AppCompatActivity{
         boolean max_151 = sharedPref.getBoolean(getString(R.string.max_151),false);
 
         player1.setName(player_name);
-        player2.setName("Machine");
+        player2.setName(player_name);
         if(max_51) {
             game.setPointsToReach(51);
         }else if (max_101){

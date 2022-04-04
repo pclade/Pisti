@@ -15,4 +15,13 @@ public class Table extends Player{
     public Integer getTheTopCardsId(){
         return getTheTopCard().getCardNumber();
     }
+
+    public String getHiddenCardsString(){
+        String strHiddenCards;
+        strHiddenCards = "";
+        for(Integer i=0; i<3;i++){
+            strHiddenCards += getHand().get(i).getSuite()+getHand().get(i).getName()+" ";
+        }
+        return strHiddenCards;
+    }
 }

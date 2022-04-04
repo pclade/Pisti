@@ -32,9 +32,11 @@ public class Game {
     private Player playerMadeLastTrick;
     private Integer amountOfCardsToDeal=4;
     private Integer pointsToReach = 51;
+    private Integer trickCount;
 
     public Game(){
       players = new ArrayList<>(0);
+      trickCount = 0;
     }
 
     public Game(String gameName){
@@ -165,7 +167,7 @@ public class Game {
           }
       }
       if(playerWithMostCards != null) {
-          playerWithMostCards.addPoints(3);
+          playerWithMostCards.addThreePoints();
       }
     }
 
@@ -236,5 +238,13 @@ public class Game {
 
     public Integer getPointsToReach(){
         return pointsToReach;
+    }
+
+    public void setTrickCount(Integer trickCount){
+        this.trickCount = trickCount;
+    }
+
+    public Integer getTrickCount(){
+        return trickCount;
     }
 }

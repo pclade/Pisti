@@ -3,14 +3,41 @@ package com.example.pisti.player;
 import com.example.pisti.deck.Card;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class Machine extends Player {
 
     private ArrayList<Card> memoryOfCards;
+    private ArrayList<String> machineNames;
 
     public Machine(){
-        setName("Machine");
         memoryOfCards = new ArrayList<>();
+        machineNames = new ArrayList<String>();
+        machineNames.add("Ati");
+        machineNames.add("Senol");
+        machineNames.add("Ali");
+        machineNames.add("Rauf");
+        machineNames.add("Yücel");
+        machineNames.add("Fatih");
+        machineNames.add("Enis");
+        machineNames.add("Sükrü");
+        machineNames.add("Beyazit");
+        machineNames.add("Halil");
+        machineNames.add("Yalcin");
+        machineNames.add("Faruk");
+        machineNames.add("Musa");
+        machineNames.add("Ilhan");
+        machineNames.add("Dincer");
+        machineNames.add("Ergün");
+        machineNames.add("Ersel");
+        machineNames.add("Hakan");
+        machineNames.add("Ilyas");
+        machineNames.add("Mithat");
+        machineNames.add("Tevfik");
+        machineNames.add("Turgut");
+        machineNames.add("Ulvi");
+        machineNames.add("Yekta");
+        Collections.shuffle(machineNames);
     }
     @Override
     public void addCardToMemory(Card card){
@@ -62,11 +89,21 @@ public class Machine extends Player {
         return cardToPlay;
     }
 
+    // Play J only, when its the last option, on a clean desk
     private Card playNextBestCard(){
         Card cardToPlay = null;
         for (Integer i = 0; i < getHand().size(); i++) {
             Card card = getHand().get(i);
-            if (card != null) {
+            if ((card != null) && (card.getName() != "J")) {
+                setPlayedCardInHand(i);
+                cardToPlay = card;
+                setPlayedCard(cardToPlay);
+                return cardToPlay;
+            }
+        }
+        for (Integer i = 0; i < getHand().size(); i++) {
+            Card card = getHand().get(i);
+            if (card != null)  {
                 setPlayedCardInHand(i);
                 cardToPlay = card;
                 setPlayedCard(cardToPlay);
@@ -81,10 +118,12 @@ public class Machine extends Player {
     //TODO Example: a pisti with a caro 10 (13 Points) ist more reliable then with cross 10 (10 Points)
     private Card playForTrick(Card topCardOnTable){
         // Maybe it's a pisti, when there is only one card on the table.
+        if(topCardOnTable == null)
+            return null;
         Card cardToPlay = null;
         for(Integer i=0; i< getHand().size();i++) {
             Card card = getHand().get(i);
-            if ((card != null) && (topCardOnTable != null) && (card.getName() == topCardOnTable.getName())) {
+            if ((card != null) && (card.getName() == topCardOnTable.getName())) {
                 cardToPlay = card;
                 setPlayedCardInHand(i);
                 setPlayedCard(cardToPlay);
@@ -94,8 +133,10 @@ public class Machine extends Player {
         return null;
     }
 
-    private Card playForTrickWithJack(){
+    private Card playForTrickWithJack(Card topCardOnTable){
         Card cardToPlay = null;
+        if(topCardOnTable == null)
+            return null;
         for(Integer i=0; i< getHand().size();i++) {
             cardToPlay = getHand().get(i);
             if ((cardToPlay!= null) && (cardToPlay.getName() == "J")) {
@@ -118,7 +159,7 @@ public class Machine extends Player {
        Card playedCard = null;
        playedCard = playForTrick(topCardOnTable);
        if(playedCard == null)
-           playedCard = playForTrickWithJack();
+           playedCard = playForTrickWithJack(topCardOnTable);
        if(playedCard == null)
          playedCard = playMostPlayedCard();
        if(playedCard == null)
@@ -126,5 +167,13 @@ public class Machine extends Player {
        playCard(playedCard);
        setPlayedCard(playedCard);
        return playedCard;
+    }
+
+    public void setName(String pName){
+        for(Integer i=0;i<machineNames.size();i++){
+            if(machineNames.get(i) != pName){
+                super.setName(machineNames.get(i));
+            }
+        }
     }
  }

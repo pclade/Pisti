@@ -13,6 +13,8 @@ public class Player {
     private Card topCardOnTable = null;
     private Integer playedCardNrInHand;
     private Card playedCard;
+    private Integer countOfPisti;
+    private boolean threePointsWinner=false;
 
     public Player() {
         this.name = name;
@@ -20,6 +22,7 @@ public class Player {
         winnerCards = new ArrayList<Card>();
         amountOfCards = 0;
         points = 0;
+        countOfPisti = 0;
     }
 
     private void refreshAmountOfCardsOnHand() {
@@ -146,6 +149,8 @@ public class Player {
     public void cleanMemories(){
         while(winnerCards.size()>0){winnerCards.remove(0);}
         cleanHand();
+        threePointsWinner = false;
+        countOfPisti = 0;
     }
     public void setPlayedCard(Card playedCard){
         this.playedCard = playedCard;
@@ -155,5 +160,32 @@ public class Player {
         return this.playedCard;
     }
 
+    public String getCardsWithPointsString(){
+        String strPointCards;
+        strPointCards = "";
+        for(Integer i=0; i<winnerCards.size();i++){
+            Card card = winnerCards.get(i);
+            if(card.getPoint()>0) {
+                strPointCards += card.getSuite() + card.getName() + "";
+            }
+        }
+        if(threePointsWinner)
+            strPointCards += "3P";
+        strPointCards += "\nPisti: "+getCountOfPisti();
+        return strPointCards;
+    }
+
+    public Integer getCountOfPisti(){
+        return countOfPisti;
+    }
+
+    public void incCountOfPisti(){
+        countOfPisti += 1;
+    }
+
+    public void addThreePoints(){
+        addPoints(3);
+        threePointsWinner = true;
+    }
 }
 
