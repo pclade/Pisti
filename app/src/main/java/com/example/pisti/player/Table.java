@@ -4,6 +4,8 @@ import com.example.pisti.deck.Card;
 
 public class Table extends Player{
 
+    private String strHiddenCards;
+
     public Table(String name){
         this.setName(name);
     }
@@ -17,11 +19,13 @@ public class Table extends Player{
     }
 
     public String getHiddenCardsString(){
-        String strHiddenCards;
+        return strHiddenCards;
+    }
+    public void buildHiddenCardsString(){
         strHiddenCards = "";
         for(Integer i=0; i<3;i++){
             strHiddenCards += getHand().get(i).getSuite()+getHand().get(i).getName()+" ";
         }
-        return strHiddenCards;
     }
+
 }

@@ -1,6 +1,7 @@
 package com.example.pisti.gui;
 
 import android.content.Context;
+import android.view.View;
 import android.widget.ImageView;
 
 import com.example.pisti.deck.Deck;
@@ -35,6 +36,7 @@ public class GuiDeck {
     public Integer getCardID(Integer cardNr, Deck deck){
         return cardIds.get(cardNr);
     }
+
 
     //public ImageView getCardsImageById(Integer id){
     //    return cardImages.get(id);

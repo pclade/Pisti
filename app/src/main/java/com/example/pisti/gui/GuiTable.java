@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.example.pisti.MainActivity;
 import com.example.pisti.R;
 import com.example.pisti.deck.Card;
 import com.example.pisti.deck.Deck;
@@ -29,6 +30,9 @@ public class GuiTable {
     private RelativeLayout layout;
     private float x;
     private float y;
+    private ObjectAnimator yAnim;
+    private GuiTrick guiTrick;
+
 
     public GuiTable(){
     }
@@ -50,7 +54,9 @@ public class GuiTable {
     }
 
     public void showCard(Integer cardNr, GuiDeck guiDeck, Deck deck){
-        imageTable.setImageResource(guiDeck.getCardID(cardNr, deck));
+        Integer CardId = guiDeck.getCardID(cardNr, deck);
+        imageTable.setImageResource(CardId);
+        imageTable.bringToFront();
     }
 
     public float getY(){
@@ -62,6 +68,7 @@ public class GuiTable {
 
     public void cardAnimation(float screenY){
         //Animation of trick
+        /*
         float saveX;
         float saveY;
         ObjectAnimator yAnim;
@@ -79,7 +86,51 @@ public class GuiTable {
                 imageTable.setImageResource(android.R.color.transparent);
             }
         });
+        */
+
+
         // Make an animation set and play X and Y animations together
+        /*
+        AnimatorSet cardPlayer = new AnimatorSet();
+        cardPlayer.play(yAnim);
+        cardPlayer.setDuration(500);
+        cardPlayer.start();
+         */
+    }
+
+    public  void addListener(AnimatorListenerAdapter animatorListenerAdapter){
+        yAnim.addListener(animatorListenerAdapter);
+    }
+
+    public void initAnimation(float screenY, float rotation){
+        //guiTrick.initAnimation(sourceView, destinationView);
+        float saveX;
+        float saveY;
+        //ObjectAnimator yAnim;
+        ImageView view;
+        view = imageTable;
+        saveX = view.getX();
+        saveY = view.getY();
+        view.setRotation(rotation);
+        yAnim = ObjectAnimator.ofFloat(view, "translationY", screenY);
+        yAnim.addListener(new AnimatorListenerAdapter() {
+            public void onAnimationEnd(Animator animation) {
+                // Restore original location of the card
+                view.setX(saveX);
+                view.setY(saveY);
+                view.setRotation(0);
+                // END
+                imageTable.setImageResource(android.R.color.transparent);
+            }
+        });
+    }
+
+    public void createGuiTrick(){
+        //guiTrick = new GuiTrick();
+    }
+
+    public void doAnimation(){
+        //guiTrick.doAnimation();
         AnimatorSet cardPlayer = new AnimatorSet();
         cardPlayer.play(yAnim);
         cardPlayer.setDuration(500);

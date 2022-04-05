@@ -61,6 +61,16 @@ public class GuiPlayer {
         return 0;
     }
 
+    public Integer getCardNrFromView(ImageView iv){
+        for(Integer i=0; i<amountOfCards;i++) {
+            ImageView ivOfCardInHand = cardImages.get(i);
+            if(ivOfCardInHand == iv){
+                return i;
+            }
+        }
+        return 0;
+    }
+
     public void playCard(Integer cardId){
     }
 

@@ -88,6 +88,7 @@ public class Game {
         int maxCardOnTable = table.getHand().size();
         if(maxCardOnTable == 2){
             if(table.getHand().get(maxCardOnTable-1).getName() == table.getHand().get(maxCardOnTable-2).getName()){
+                table.setTopCardOnTable(null);
                 return true;
             }
             else{
@@ -101,10 +102,12 @@ public class Game {
         int maxCardOnTable = table.getHand().size();
         if(maxCardOnTable >= 2){
           if(deck.isJack(table.getHand().get(maxCardOnTable-1))){
+              table.setTopCardOnTable(null);
               return true;
           }
           else
           if(table.getHand().get(maxCardOnTable-1).getName() == table.getHand().get(maxCardOnTable-2).getName()){
+              table.setTopCardOnTable(null);
               return true;
           }
           else{
