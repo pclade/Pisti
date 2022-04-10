@@ -24,6 +24,10 @@ public class Deck {
         cardDeck = new ArrayList<>();
     }
 
+    public void setDeckSize(int deckSize) {
+        this.deckSize = deckSize;
+    }
+
     public void createCards(){
         if(!isEmpty())
             return;
@@ -33,8 +37,7 @@ public class Deck {
             card.setName(getCardsName(card));
             card.setSuite(getCardsSuite(card));
             cardDeck.add(card);
-
-            // TO DO
+            //TODO
             // Weight should come from Game. Cards could have in every Game another weight.
             // Card card = new Card(i, getCardSuite(i), getCardName(i), getWeight(i));
             // cardDeck.add(card);
@@ -42,14 +45,14 @@ public class Deck {
     }
 
     private Suite getCardSuite(int i){
-        // TO DO: Who should define the Suite?
+        //TODO: Who should define the Suite?
         // A Deck is a composition of Cards and the deck should know about the Suites.
         // In Swiss-German-Cards for example, there are different suites than Spade, heart, caro and cross: Schild, Schäle, Rose and Eichle.
       return new Suite("Spade");
     }
 
     private String getCardName(int i){
-        // TO DO: Who should define the name of a card?
+        //TODO: Who should define the name of a card?
         // A Deck is a composition of Cards and the deck should know about the names of the cards.
         // In Swiss-German-Cards for example, there are different names than Jack, Queen and King: Under, Ober.
       return "Jack";
@@ -93,24 +96,6 @@ public class Deck {
         return "";
     }
 
-    public String getAllCardsRepresentations() {
-        String allCardsTextRepresentations = "";
-        for (int i = 0; i < cardDeck.size(); ++i){
-            Card card = cardDeck.get(i);
-            allCardsTextRepresentations += card.getSuite() + "" + card.getName() + " ";
-        }
-        return allCardsTextRepresentations;
-    }
-
-    public String getAllCardsRepresentations(ArrayList<Card> hand) {
-        String allCardsTextRepresentations = "";
-        for (int i = 0; i < hand.size(); ++i){
-            Card card = hand.get(i);
-            allCardsTextRepresentations += card.getSuite() + "" + card.getName() + " ";
-        }
-        return allCardsTextRepresentations;
-    }
-
     public Card dealTopCardOnDec(){
         if(isEmpty())
             return null;
@@ -126,25 +111,18 @@ public class Deck {
         return false;
     }
 
-//    public Integer getSize(){
-//        return deckSize;
-//    }
-
     public boolean isJack(Card card){
         return card.getName() == "J";
     }
-
     public boolean isCaro(Card card){
         return card.getSuite() == "♦";
     }
-
     public boolean isCross(Card card){
         return card.getSuite() == "♣";
     }
     public boolean isTen(Card card){
         return card.getName()=="T";
     }
-
     public boolean isTwo(Card card){
         return card.getName()=="2";
     }

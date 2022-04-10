@@ -1,5 +1,6 @@
 package com.example.pisti.player;
 
+import com.example.pisti.R;
 import com.example.pisti.deck.Card;
 
 import java.util.ArrayList;
@@ -28,11 +29,12 @@ public class Player {
     private void refreshAmountOfCardsOnHand() {
         amountOfCards = this.getHand().size();
     }
-
+/*
     public Integer getAmountOfCardsOnHand() {
         return amountOfCards;
     }
 
+ */
     public void takeCard(Card card) {
         this.getHand().add(card);
         refreshAmountOfCardsOnHand();
@@ -91,8 +93,6 @@ public class Player {
             return null;
         hand.set(getCardIndex(playedCard), null);
         setPlayedCard(playedCard);
-        //hand.remove(playedCard);
-        //refreshAmountOfCardsOnHand();
         return playedCard;
     }
 
@@ -160,19 +160,8 @@ public class Player {
         return this.playedCard;
     }
 
-    public String getCardsWithPointsString(){
-        String strPointCards;
-        strPointCards = "";
-        for(Integer i=0; i<winnerCards.size();i++){
-            Card card = winnerCards.get(i);
-            if(card.getPoint()>0) {
-                strPointCards += card.getSuite() + card.getName() + "";
-            }
-        }
-        if(threePointsWinner)
-            strPointCards += "3P";
-        strPointCards += "\nPisti: "+getCountOfPisti();
-        return strPointCards;
+    public boolean isThreePointsWinner(){
+        return threePointsWinner;
     }
 
     public Integer getCountOfPisti(){

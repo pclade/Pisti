@@ -66,38 +66,6 @@ public class GuiTable {
         return imageTable.getX();
     }
 
-    public void cardAnimation(float screenY){
-        //Animation of trick
-        /*
-        float saveX;
-        float saveY;
-        ObjectAnimator yAnim;
-        ImageView view;
-        view = imageTable;
-        saveX = view.getX();
-        saveY = view.getY();
-        yAnim = ObjectAnimator.ofFloat(view, "translationY", screenY);
-        yAnim.addListener(new AnimatorListenerAdapter() {
-            public void onAnimationEnd(Animator animation) {
-                // Restore original location of the card
-                view.setX(saveX);
-                view.setY(saveY);
-                // END
-                imageTable.setImageResource(android.R.color.transparent);
-            }
-        });
-        */
-
-
-        // Make an animation set and play X and Y animations together
-        /*
-        AnimatorSet cardPlayer = new AnimatorSet();
-        cardPlayer.play(yAnim);
-        cardPlayer.setDuration(500);
-        cardPlayer.start();
-         */
-    }
-
     public  void addListener(AnimatorListenerAdapter animatorListenerAdapter){
         yAnim.addListener(animatorListenerAdapter);
     }
@@ -123,10 +91,6 @@ public class GuiTable {
                 imageTable.setImageResource(android.R.color.transparent);
             }
         });
-    }
-
-    public void createGuiTrick(){
-        //guiTrick = new GuiTrick();
     }
 
     public void doAnimation(){

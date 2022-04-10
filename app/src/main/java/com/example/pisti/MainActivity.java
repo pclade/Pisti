@@ -1,5 +1,8 @@
 package com.example.pisti;
 
+import com.example.pisti.gui.Animation;
+import com.example.pisti.gui.Animation.*;
+
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
@@ -13,6 +16,7 @@ import android.app.Application;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.os.Bundle;
@@ -48,22 +52,15 @@ import java.util.concurrent.Semaphore;
 
 //public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 public class MainActivity extends AppCompatActivity {
-    //ImageView iv_card_0, iv_card_1, iv_card_2, iv_card_3;
-
-    //ImageView iv_card_back_0, iv_card_back_1, iv_card_back_2, iv_card_back_3;
 
     ArrayList<ImageView> cardResourcesP1 = new ArrayList<ImageView>();
     ArrayList<ImageView> cardResourcesP2 = new ArrayList<ImageView>();
 
-    //boolean playAnimationAfterBusiness = false;
-    //View viewToAnimate;
     Table table;
     Game game;
     Deck deck;
     Player player1;
     Machine player2;
-    //Player currentPlayer;
-    ImageView cardToDisplay;
     Gui gui;
     GuiTable guiTable;
     GuiPlayer guiPlayer1;
@@ -74,6 +71,8 @@ public class MainActivity extends AppCompatActivity {
 
     TextView textPisti;
     ImageView settings;
+    ImageView help;
+    String strScore;
 
     AnimatorListenerAdapter animatorListenerAdapter;
 
@@ -87,9 +86,14 @@ public class MainActivity extends AppCompatActivity {
             showCustomDialog();
         });
 
+        help = findViewById(R.id.iv_help);
+        help.setOnClickListener((view) -> {
+            startActivity(new Intent(getApplicationContext(), HelpActivity.class));
+        });
+
+
 
         semaphoreMachine = false;
-        //  semaphoreTrick = false;
         // Draw Background
         RelativeLayout relativeLayout = findViewById(R.id.root_layout_id);
         relativeLayout.setBackground(getResources().getDrawable(R.drawable.wood_background));
@@ -153,10 +157,21 @@ public class MainActivity extends AppCompatActivity {
 
         // Create game objects
         game = new Game();
+        game.setStrPisti(getString(R.string.app_name));
+        game.setStrTotalPoints(getString(R.string.score_total_points));
+        game.setStrTitlePoints(getString(R.string.score_title_points));
+        game.setStrThreePoint(getString(R.string.three_point_representation));
+        game.setStrComma(getString(R.string.str_comma));
+        game.setStrDoublePoint(getString(R.string.str_double_point));
+        game.setStrCRLF(getString(R.string.str_CRLF));
+        // Create Deck object
         deck = new Deck();
+        //TODO: DEBUG
+        //deck.setDeckSize(28);
+        //
         player1 = new Player();
         player2 = new Machine();
-        table = new Table("Table");
+        table = new Table(getString(R.string.table));
 
         gui = new Gui();
         guiDeck = new GuiDeck();
@@ -178,72 +193,18 @@ public class MainActivity extends AppCompatActivity {
         player1.setName("Senol");
         game.addPlayer(player1);
         guiPlayer1.setImageViewFromResources(cardResourcesP1);
-
         // Player 2
         player2.setName(player1.getName());
         game.addPlayer(player2);
         guiPlayer2.setImageViewFromResources(cardResourcesP2);
         // Table
-
-        deck.createCards();
-//        deck.shuffleDeck();
-
         game.setDeck(deck);
-        game.setCardsPoints();
-
-        guiDeck.createCards(getApplicationContext(), deck);
-
-        deck.shuffleDeck();
-
-        game.dealCards(table);
-        table.buildHiddenCardsString();
-
-        table.setTopCardOnTable(table.getTheTopCard());
-        guiTable.showCard(table.getTheTopCardsId(), guiDeck, deck);
-
-        // Every Player memorizes the top card on the table
-        game.addCardToMemoryOfPlayers(table.getTheTopCard());
-        // Table has 4 cards dealt, but shows only the last dealt card;
-        deal();
+        newGame();
         readPreferences();
+        //TODO: DEBUG
+        //game.setPointsToReach(11);
+        //
         textPisti = (TextView) findViewById(R.id.pisti);
-
-
-
-/*
-        animatorListenerAdapter = new AnimatorListenerAdapter() {
-            public void onAnimationEnd(Animator animation){
-                guiPlayer1.restoreCardPositions();
-                Integer cardNr = 0;
-                cardNr = guiPlayer1.getCardNrFromId(guiPlayer1.getSourceView().getId());
-                Card playedCard = player1.play(cardNr, table.getTopCardOnTable());
-                if(playedCard==null) // Clicked on a previously played card
-                    return;
-                playP1(playedCard, cardNr);
-                // Machine
-                semaphoreMachine = true;
-                playedCard = player2.playMachine(table.getTopCardOnTable());
-                playP2(playedCard, cardNr);
-                if(playedCard==null)
-                    return;
-            }
-        };
-*/
-        /*
-        animatorListenerAdapterM = new AnimatorListenerAdapter() {
-            public void onAnimationEnd(Animator animation){
-                guiPlayer2.restoreCardPositions();
-                ImageView view = guiPlayer2.cardImages.get(player2.getPlayedCardNrInHand());
-                guiTable.showCard(player2.getPlayedCard().getCardNumber(), guiDeck, deck);
-                view.setImageResource(android.R.color.transparent);
-                //guiPlayer2.cardImages.get(cardNr).setImageResource(android.R.color.transparent);
-                play(player2.getPlayedCard(), player2);
-                semaphoreMachine = false;
-                deal();
-            }
-        };
-
-         */
     }
 
     private View.OnClickListener clickListener = new View.OnClickListener() {
@@ -260,7 +221,7 @@ public class MainActivity extends AppCompatActivity {
             while (gui.getAnimationSize() > 0) {
                 gui.removeFirstAnimation();
             }
-            gui.addAnimation(1, view);
+            gui.addAnimation(Animation.PLAYER1_PLAY, view);
             play(playedCard, player1);
             //
             playedCard = player2.playMachine(table.getTopCardOnTable());
@@ -268,7 +229,7 @@ public class MainActivity extends AppCompatActivity {
                 semaphoreMachine = false;
                 return;
             }
-            gui.addAnimation(2, null);
+            gui.addAnimation(Animation.PLAYER2_PLAY, null);
             play(playedCard, player2);
             playNextAnimation();
         }
@@ -285,54 +246,70 @@ public class MainActivity extends AppCompatActivity {
                 guiPlayer1.showCards(player1.getHand(), guiDeck, deck);
                 guiPlayer2.showCards(player2.getHand(), guiDeck, deck);
             }
+        }
+    }
+
+    private void playPlayerPisti(Player player){
+        if (player == player1) {
+            gui.addAnimation(Animation.PLAYER1_PISTI, null);
         } else {
-            game.cleanUp(table);
-            guiTable.imageTable.setImageResource(android.R.color.transparent);
-            player1.calcCardPoints();
-            player2.calcCardPoints();
-            String strScore;
-            game.setTrickCount(0);
-            strScore = player1.getName() + ", total points: " + player1.getPoints() + "\n" +
-                    "Points: " + player1.getCardsWithPointsString() + "\n" +
-                    "\n" +
-                    player2.getName() + ", total points: " + player2.getPoints() + "\n" +
-                    "Points: " + player2.getCardsWithPointsString() + "\n";
-            if (game.maxPointsReached()) {
-                AlertDialog builder = new AlertDialog.Builder(this)
-                        .setMessage(strScore).setTitle("SCORE")
-                        .setCancelable(false)
-                        .setPositiveButton("NEW GAME", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int id) {
-                                newGame();
-                            }
-                        })
-                        .setNegativeButton("EXIT", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int id) {
-                                System.exit(0);
-                            }
-                        }).show();
-                game.cleanMemories();
-                game.cleanPoints();
-            } else {
-                // Show Points
-                AlertDialog builder = new AlertDialog.Builder(this)
-                        .setMessage(strScore).setTitle("SCORE")
-                        .setCancelable(false)
-                        .setPositiveButton("CONTINUE", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int id) {
-                                nextRound();
-                            }
-                        }).show();
-                game.cleanMemories();
+            gui.addAnimation(Animation.PLAYER2_PISTI, null);
+        }
+    }
+
+    private void playPlayerTrick(Player player){
+        if (player == player1) {
+            gui.addAnimation(Animation.PLAYER1_TRICK, null);
+        } else {
+            gui.addAnimation(Animation.PLAYER2_TRICK, null);
+        }
+    }
+
+    private void playPlayerLastTrick(Player player){
+        if (game.getPlayerMadeLastTrick() == player1) {
+            gui.addAnimation(Animation.PLAYER1_TRICK, null);
+        } else {
+            gui.addAnimation(Animation.PLAYER2_TRICK, null);
+        }
+    }
+
+    private void playShowHiddenCards(Player player){
+        if (game.getTrickCount() == 0) {
+            game.setTrickCount(1);
+            if (player == player1) {
+                gui.addAnimation(Animation.SHOW_HIDDEN_CARDS, null);
             }
+        }
+    }
+    private void playGameFinished(Player player){
+        // Animate Card to the player with last Tick
+        game.setTrickCount(1);
+        if(game.getPlayerMadeLastTrick() != null) {
+            playPlayerLastTrick(player);
+        }
+        else{
+            // DO NOTHING
+        }
+        game.cleanUp(table);
+        //guiTable.imageTable.setImageResource(android.R.color.transparent);
+        player1.calcCardPoints();
+        player2.calcCardPoints();
+        //String strScore;
+        game.setTrickCount(0);
+        strScore = game.getScoreString();
+        if (game.maxPointsReached()) {
+            gui.addAnimation(Animation.SHOW_GAME_SCORE, null);
+            game.cleanMemories();
+            table.cleanMemories();
+            game.cleanPoints();
+        } else {
+            gui.addAnimation(Animation.SHOW_ROUND_SCORE, null);
+            game.cleanMemories();
+            table.cleanMemories();
         }
     }
 
     private void play(Card playedCard, Player player) {
-        //TODO: Test Animation
         table.takeCard(playedCard);
         player.addCardToMemory(playedCard);
         table.setTopCardOnTable(playedCard);
@@ -345,38 +322,26 @@ public class MainActivity extends AppCompatActivity {
                 player.addPoints(10);
                 game.setPlayerMadeLastTrick(player);
                 //Animation of trick
-                gui.addAnimation(5, null);
-                if (player == player1) {
-                    gui.addAnimation(11, null);
-                } else {
-                    gui.addAnimation(12, null);
-                }
-            } else if (game.isItATrick(table)) {
-                //semaphoreTrick = true;
-                if (player == player1) {
-                    gui.addAnimation(3, null);
-                } else {
-                    gui.addAnimation(4, null);
-                }
-                if (game.getTrickCount() == 0) {
-                    game.setTrickCount(1);
-                    if (player == player1) {
-                        //It's the first trick, show hidden cards to player1
-                        gui.addAnimation(9, null);
-                    }
-                }
+                gui.addAnimation(Animation.PISTI, null);
+                playPlayerPisti(player);
+            } else
+            if (game.isItATrick(table)) {
+                playPlayerTrick(player);
+                playShowHiddenCards(player);
                 player.addToWinner(table);
                 game.setPlayerMadeLastTrick(player);
-            } else if (game.finished()) {
-                // Animate Card to the player with last Tick
-                game.setTrickCount(1);
-                if (game.getPlayerMadeLastTrick() == player1) {
-                    gui.addAnimation(3, null);
-                } else {
-                    gui.addAnimation(4, null);
-                }
+            }
+            else{ // Game is not finished
+                // DO NOTHING
             }
         }
+        else{ // Table is clean and the last card is played from Machine
+                // DO NOTHING
+        }
+        if(game.finished()) {
+            playGameFinished(player);
+        }
+
     }
 
     public void nextRound() {
@@ -387,6 +352,7 @@ public class MainActivity extends AppCompatActivity {
         deck.shuffleDeck();
         game.setCardsPoints();
         game.dealCards(table);
+        table.buildHiddenCardsString();
         table.setTopCardOnTable(table.getTheTopCard());
         guiTable.showCard(table.getTheTopCardsId(), guiDeck, deck);
         // Every Player memorizes the top card on the table
@@ -414,7 +380,7 @@ public class MainActivity extends AppCompatActivity {
         Context context = getApplicationContext();
         SharedPreferences sharedPref = context.getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
 
-        String player_name_default = getResources().getString(R.string.player_name);
+        String player_name_default = getString(R.string.player_name);
         String player_name = sharedPref.getString(getString(R.string.player_name), player_name_default);
 
         boolean max_51 = sharedPref.getBoolean(getString(R.string.max_51), true);
@@ -430,9 +396,6 @@ public class MainActivity extends AppCompatActivity {
         } else if (max_151) {
             game.setPointsToReach(151);
         }
-        //TODO: DEBUGGING
-        //game.setPointsToReach(5);
-
     }
 
     public void showCustomDialog() {
@@ -554,7 +517,7 @@ public class MainActivity extends AppCompatActivity {
         guiTable.doAnimation();
     }
 
-    private void playAnimation11(View view){
+    private void playAnimation9(View view){
         guiTable.initAnimation(1000, 90);
         animatorListenerAdapter = new AnimatorListenerAdapter() {
             public void onAnimationEnd(Animator animation) {
@@ -566,7 +529,7 @@ public class MainActivity extends AppCompatActivity {
         guiTable.doAnimation();
     }
 
-    private void playAnimation12(View view){
+    private void playAnimation10(View view){
         guiTable.initAnimation(-1000, 90);
         animatorListenerAdapter = new AnimatorListenerAdapter() {
             public void onAnimationEnd(Animator animation) {
@@ -579,12 +542,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void playAnimation9(View view){
+    private void playAnimation7(View view){
         String strHiddenCardsOnTable;
         strHiddenCardsOnTable = table.getHiddenCardsString();
         AlertDialog builder = new AlertDialog.Builder(this)
                 .setMessage(strHiddenCardsOnTable).setTitle("HIDDEN CARDS")
-                //.setCancelable(false)
+                .setCancelable(false)
                 .setPositiveButton("CLOSE", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
@@ -601,6 +564,43 @@ public class MainActivity extends AppCompatActivity {
         playNextAnimation();
     }
 
+    private void playAnimation6(View view){
+        // Show Points
+        AlertDialog builder = new AlertDialog.Builder(this)
+                .setMessage(strScore).setTitle("SCORE")
+                .setCancelable(false)
+                .setPositiveButton("CONTINUE", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        nextRound();
+                        gui.removeFirstAnimation();
+                        playNextAnimation();
+                    }
+                }).show();
+    }
+
+    private void playAnimation8(View view){
+        AlertDialog builder = new AlertDialog.Builder(this)
+                .setMessage(strScore).setTitle("SCORE")
+                .setCancelable(false)
+                .setPositiveButton("NEW GAME", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        newGame();
+                        gui.removeFirstAnimation();
+                        playNextAnimation();
+                    }
+                })
+                .setNegativeButton("EXIT", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        System.exit(0);
+                        gui.removeFirstAnimation();
+                        playNextAnimation();
+                    }
+                }).show();
+    }
+
     public void playNextAnimation() {
         if(gui.getAnimationSize()==0) {
             deal();
@@ -608,30 +608,16 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
         switch (gui.getAnimationSequence(0)) {
-            case 1:
-                playAnimation1(gui.getAnimationView(0));
-                break;
-            case 2:
-                playAnimation2(gui.getAnimationView(0));
-                break;
-            case 3:
-                playAnimation3(gui.getAnimationView(0));
-                break;
-            case 4:
-                playAnimation4(gui.getAnimationView(0));
-                break;
-            case 5:
-                playAnimation5(gui.getAnimationView(0));
-                break;
-            case 9:
-                playAnimation9(gui.getAnimationView(0));
-                break;
-            case 11:
-                playAnimation11(gui.getAnimationView(0));
-                break;
-            case 12:
-                playAnimation12(gui.getAnimationView(0));
-                break;
+            case  PLAYER1_PLAY: playAnimation1(gui.getAnimationView(0));  break;
+            case  PLAYER2_PLAY: playAnimation2(gui.getAnimationView(0));  break;
+            case  PLAYER1_TRICK: playAnimation3(gui.getAnimationView(0));  break;
+            case  PLAYER2_TRICK: playAnimation4(gui.getAnimationView(0));  break;
+            case  PISTI: playAnimation5(gui.getAnimationView(0));  break;
+            case  SHOW_ROUND_SCORE: playAnimation6(gui.getAnimationView(0));  break;
+            case  SHOW_HIDDEN_CARDS: playAnimation7(gui.getAnimationView(0));  break;
+            case SHOW_GAME_SCORE: playAnimation8(gui.getAnimationView(0)); break;
+            case PLAYER1_PISTI: playAnimation9(gui.getAnimationView(0)); break;
+            case PLAYER2_PISTI: playAnimation10(gui.getAnimationView(0)); break;
         }
     }
 }
