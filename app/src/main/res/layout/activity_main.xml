@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/root_layout_id"
     android:layout_width="match_parent"
@@ -9,6 +8,7 @@
     tools:context=".MainActivity">
 
     <ImageView
+        android:contentDescription="@string/card_table"
         android:id="@+id/iv_table_0"
         android:layout_width="92dp"
         android:layout_height="125dp"
@@ -17,11 +17,13 @@
         android:src="@drawable/red_card_back"/>
 
     <ImageView
+        android:contentDescription="@string/table"
         android:id="@+id/iv_table"
         android:layout_width="3700dp"
         android:layout_height="6666dp" />
 
     <ImageView
+        android:contentDescription="@string/card_first_first_player"
         android:id="@+id/iv_card_0"
         android:layout_width="92dp"
         android:layout_height="125dp"
@@ -29,6 +31,7 @@
         android:src="@drawable/red_card_back" />
 
     <ImageView
+        android:contentDescription="@string/card_second_first_player"
         android:id="@+id/iv_card_1"
         android:layout_width="92dp"
         android:layout_height="125dp"
@@ -38,6 +41,7 @@
         android:src="@drawable/red_card_back" />
 
     <ImageView
+        android:contentDescription="@string/card_third_first_player"
         android:id="@+id/iv_card_2"
         android:layout_width="92dp"
         android:layout_height="125dp"
@@ -47,6 +51,7 @@
         android:src="@drawable/red_card_back" />
 
     <ImageView
+        android:contentDescription="@string/card_fourth_first_player"
         android:id="@+id/iv_card_3"
         android:layout_width="92dp"
         android:layout_height="125dp"
@@ -56,6 +61,7 @@
         android:src="@drawable/red_card_back" />
 
     <ImageView
+        android:contentDescription="@string/card_fourth_second_player"
         android:id="@+id/iv_card_back_3"
         android:layout_width="92dp"
         android:layout_height="125dp"
@@ -65,6 +71,7 @@
         android:src="@drawable/red_card_back" />
 
     <ImageView
+        android:contentDescription="@string/card_third_second_player"
         android:id="@+id/iv_card_back_2"
         android:layout_width="92dp"
         android:layout_height="125dp"
@@ -74,6 +81,7 @@
         android:src="@drawable/red_card_back" />
 
     <ImageView
+        android:contentDescription="@string/card_second_second_player"
         android:id="@+id/iv_card_back_1"
         android:layout_width="92dp"
         android:layout_height="125dp"
@@ -83,6 +91,7 @@
         android:src="@drawable/red_card_back" />
 
     <ImageView
+        android:contentDescription="@string/card_first_second_player"
         android:id="@+id/iv_card_back_0"
         android:layout_width="92dp"
         android:layout_height="125dp"
@@ -94,21 +103,18 @@
         android:id="@+id/iv_settings"
         android:layout_width="32dp"
         android:layout_height="32dp"
+        android:layout_alignParentRight="true"
         android:layout_centerInParent="true"
-        android:layout_toRightOf="@id/iv_table_0"
-        android:layout_marginLeft="100dp"
+        android:layout_marginVertical="300dp"
         android:src="@drawable/settings" />
+    <ImageView
+        android:id="@+id/iv_help"
+        android:layout_width="22dp"
+        android:layout_height="22dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginVertical="340dp"
+        android:src="@drawable/help" />
 
-    <Button
-        android:id="@+id/points"
-        android:layout_width="181dp"
-        android:layout_height="87dp"
-        android:layout_centerInParent="true"
-        android:text="P1=100, P2=200"
-        android:textStyle="bold"
-        android:textAlignment="center"
-        android:visibility="gone"
-        />
     <TextView
         android:id="@+id/pisti"
         android:layout_width="160dp"
@@ -122,24 +128,4 @@
         android:textAlignment="center"
         android:visibility="gone"
         />
-
-    <Button
-        android:id="@+id/new_game"
-        android:layout_width="160dp"
-        android:layout_height="81dp"
-        android:layout_centerInParent="true"
-        android:layout_alignLeft="@id/iv_table"
-        android:text="NEW GAME"
-        android:visibility="gone"
-        android:textStyle="bold" />
-    <Button
-        android:id="@+id/exit"
-        android:layout_width="160dp"
-        android:layout_height="81dp"
-        android:layout_centerInParent="true"
-        android:layout_alignRight="@id/iv_table"
-        android:text="EXIT"
-        android:visibility="gone"
-        android:textStyle="bold" />
-
 </RelativeLayout>

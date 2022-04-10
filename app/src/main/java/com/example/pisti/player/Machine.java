@@ -44,12 +44,15 @@ public class Machine extends Player {
         memoryOfCards.add(card);
     }
 
+    /*
     private Card getCardOnTopOfMemory(){
         Integer topCardIndex = memoryOfCards.size();
         if(topCardIndex > 0)
           return memoryOfCards.get(topCardIndex-1);
         return null;
     }
+
+     */
 
     private Integer getAmountOfCardNameInMemory(Card card){
         Integer amountOfCardNameInMemory = 0;

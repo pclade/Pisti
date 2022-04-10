@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Pisti</string>
+    <string name="app_name">Pişti</string>
     <string name="dialog_title">"Settings"></string>
     <string name="dialog_message">"Hallo"></string>
     <string name="cancel">"Cancel"></string>
@@ -9,4 +9,56 @@
     <string name="max_51">"51"</string>
     <string name="max_101">"101"</string>
     <string name="max_151">"151"</string>
+    <string name="table">"The table</string>
+    <string name="card_table">"Card on the table</string>
+    <string name="card_first_first_player">"First card on the hand of the player</string>
+    <string name="card_second_first_player">"Second card on the hand of the player</string>
+    <string name="card_third_first_player">"Third card on the hand of the player</string>
+    <string name="card_fourth_first_player">"Fourth card on the hand of the player</string>
+    <string name="card_first_second_player">"First card on the hand of the machine</string>
+    <string name="card_second_second_player">"Second card on the hand of the machine</string>
+    <string name="card_third_second_player">"Third card on the hand of the machine</string>
+    <string name="card_fourth_second_player">"Fourth card on the hand of the machine</string>
+    <string name="title_activity_help">Pişti</string>
+    <string name="three_point_representation">+3</string>
+    <string name="score_title_points">Points</string>
+    <string name="score_total_points">total points</string>
+    <string name="str_double_point">: </string>
+    <string name="str_comma">, </string>
+    <string name="str_CRLF">\n</string>
+
+
+
+    <string name="large_text">
+        "Pişti (sprich: Pischti) ist ein populäres und verbreitetes orientalisches Kartenspiel, das"
+        "mit einem Blatt aus 52 Karten und von 2 bis 4 Personen gespielt wird.\n\n"
+
+        "Spielverlauf:\n"
+        "Es spielt immer einer nach dem anderen (d. h. derjenige, der den Stich gemacht hat, kommt "
+        "nicht nochmals dran)."
+        "Wer sticht, erhält alle Karten, die sich auf dem Tisch angesammelt haben. Wer den ersten "
+        "Stich realisiert, erhält auch die drei verdeckten Karten. Er ist der einzige Spieler, der "
+        "diese Karten anschauen darf, was einen taktischen Vorteil bedeutet. Man kann eine Karte nach "
+        "seiner Wahl spielen – es spielt dabei keine Rolle, welche Karte der Spieler davor gelegt "
+        "hat. Sind die vier Karten aufgebraucht, erhält jeder Spieler wieder vier Karten vom Stapel.\n\n"
+
+        "Ein Pişti ist die erste Karte, die durch eine gleich hohe Karte gedeckt und dadurch gestochen "
+        "wird (d. h. es dürfen nur die beiden gleichen Karten auf dem Tisch sein, sonst ist es ein "
+        "normaler Stich – sind es die zwei letzten Karten, zählt es nicht als Pişti). In der Regel "
+        "wird auf 101 oder üblicher 151 Punkte gespielt.\n\n"
+
+        "Stechen:\n"
+        "Einen Stich kann man entweder mit jedem Buben erzielen oder wenn die Karte auf dem Tisch "
+        "mit einer gleich hohen Karte gedeckt werden kann.\n\n"
+
+        "Punkte:\n"
+        "Am Ende eines Durchgangs werden die Punkte gezählt. Die Wertungen sind:\n"
+        "- Kreuz 2 = 2 Punkte\n"
+        "- Karo 10 = 3 Punkte\n"
+        "- Bube = 1 Punkt\n"
+        "- As = 1 Punkt\n"
+        "- Wer die meisten Stiche besitzt = 3 Punkte\n"
+        "- Pişti = 10 Punkte"
+    </string>
+    <string name="action_settings">Settings</string>
 </resources>

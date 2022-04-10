@@ -33,15 +33,47 @@ public class Game {
     private Integer amountOfCardsToDeal=4;
     private Integer pointsToReach = 51;
     private Integer trickCount;
+    private static String strPisti;
+    private static String strThreePoint;
+    private static String strTitlePoints;
+    private static String strTotalPoints;
+    private static String strDoublePoint;
+    private static String strComma;
+    private static String strCRLF;
+    private ArrayList<Integer> possiblePointsToReach;
+
 
     public Game(){
       players = new ArrayList<>(0);
+      possiblePointsToReach = new ArrayList<>(0);
+      possiblePointsToReach.add(51);
+      possiblePointsToReach.add(101);
+      possiblePointsToReach.add(151);
+      setPointsToReach(51);
       trickCount = 0;
     }
 
     public Game(String gameName){
       this.gameName = gameName;
     }
+    public void setStrPisti(String s){
+        strPisti = s;
+    }
+    public void setStrThreePoint(String s){
+        strThreePoint = s;
+    }
+    public void setStrTitlePoints(String s){
+        strTitlePoints = s;
+    }
+    public void setStrTotalPoints(String s){
+        strTotalPoints = s;
+    }
+    public void setStrComma(String s){
+        strComma = s;
+    }
+    public void setStrDoublePoint(String s){ strDoublePoint = s; }
+    public void setStrCRLF(String s){ strCRLF = s; }
+
 
     public Integer getNumberOfPlayers(){
         return players.size();
@@ -233,6 +265,30 @@ public class Game {
             }
         }
         return false;
+    }
+
+    public String getScoreString(){
+        String strScore;
+        Player player;
+        strScore = "";
+        for(Integer i=0;i<players.size();i++) {
+            player = players.get(i);
+            strScore += player.getName() + strComma + strTotalPoints+ strDoublePoint + player.getPoints() + strCRLF;
+            strScore += strTitlePoints+strDoublePoint;
+            for (Integer c = 0; c < player.getWinners().size(); c++) {
+                Card card = player.getWinners().get(c);
+                if (card.getPoint() > 0) {
+                    strScore += card.getSuite() + card.getName();
+                }
+            }
+            if (player.isThreePointsWinner()) {
+                strScore += strThreePoint;
+            }
+            strScore += strCRLF;
+            strScore += strPisti + strDoublePoint+ player.getCountOfPisti();
+            strScore += strCRLF;
+        }
+        return strScore;
     }
 
     public void setPointsToReach(Integer pointsToReach){
