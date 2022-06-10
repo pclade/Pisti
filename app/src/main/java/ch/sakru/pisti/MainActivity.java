@@ -202,6 +202,7 @@ public class MainActivity extends AppCompatActivity {
         guiTable.setContext(getApplicationContext());
         guiTable.createView();
         guiTable.setImageTable(findViewById(R.id.iv_table_0));
+        guiTable.setImageHiddenCard(findViewById(R.id.iv_table_h1));
         guiTable.imageTable.requestLayout();
         guiTable.imageTable.getLayoutParams().width = layoutWidth;
         guiTable.imageTable.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
@@ -372,6 +373,7 @@ public class MainActivity extends AppCompatActivity {
         table.buildHiddenCardsString();
         table.setTopCardOnTable(table.getTheTopCard());
         guiTable.showCard(table.getTheTopCardsId(), guiDeck, deck);
+        guiTable.ShowHiddenCard();
         // Every Player memorizes the top card on the table
         game.addCardToMemoryOfPlayers(table.getTheTopCard());
         deal();// Code here executes on main thread after user presses button
@@ -388,6 +390,7 @@ public class MainActivity extends AppCompatActivity {
         table.buildHiddenCardsString();
         table.setTopCardOnTable(table.getTheTopCard());
         guiTable.showCard(table.getTheTopCardsId(), guiDeck, deck);
+        guiTable.ShowHiddenCard();
         // Every Player memorizes the top card on the table
         game.addCardToMemoryOfPlayers(table.getTheTopCard());
         deal();// Code here executes on main thread after user presses button

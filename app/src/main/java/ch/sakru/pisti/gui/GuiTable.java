@@ -11,18 +11,20 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import ch.sakru.pisti.R;
 import ch.sakru.pisti.deck.Deck;
 
 public class GuiTable {
 
     private Context context;
     public ImageView imageTable;
+    public ImageView imageHiddenCard;
     private RelativeLayout layout;
     private float x;
     private float y;
     private ObjectAnimator yAnim;
+    private ObjectAnimator yAnimH;
     private GuiTrick guiTrick;
-
 
     public GuiTable(){
     }
@@ -39,6 +41,10 @@ public class GuiTable {
         imageTable = imageView;
     }
 
+    public void setImageHiddenCard(ImageView imageView){
+        imageHiddenCard = imageView;
+    }
+
     public ImageView getImageTable(){
         return imageTable;
     }
@@ -47,6 +53,10 @@ public class GuiTable {
         Integer CardId = guiDeck.getCardID(cardNr, deck);
         imageTable.setImageResource(CardId);
         imageTable.bringToFront();
+    }
+
+    public void ShowHiddenCard(){
+        imageHiddenCard.setVisibility(View.VISIBLE);
     }
 
     public float getY(){
@@ -64,12 +74,21 @@ public class GuiTable {
         //guiTrick.initAnimation(sourceView, destinationView);
         float saveX;
         float saveY;
+        float saveXh;
+        float saveYh;
         //ObjectAnimator yAnim;
         ImageView view;
+        ImageView viewHidden;
         view = imageTable;
         saveX = view.getX();
         saveY = view.getY();
         view.setRotation(rotation);
+
+        viewHidden = imageHiddenCard;
+        saveXh = viewHidden.getX();
+        saveYh = viewHidden.getY();
+        viewHidden.setRotation(rotation);
+
         yAnim = ObjectAnimator.ofFloat(view, "translationY", screenY);
         yAnim.addListener(new AnimatorListenerAdapter() {
             public void onAnimationEnd(Animator animation) {
@@ -81,12 +100,24 @@ public class GuiTable {
                 imageTable.setImageResource(android.R.color.transparent);
             }
         });
+        yAnimH = ObjectAnimator.ofFloat(viewHidden, "translationY", screenY);
+        yAnimH.addListener(new AnimatorListenerAdapter() {
+            public void onAnimationEnd(Animator animation) {
+                // Restore original location of the card
+                viewHidden.setX(saveXh);
+                viewHidden.setY(saveYh);
+                viewHidden.setRotation(0);
+                // END
+                imageHiddenCard.setVisibility(View.INVISIBLE);
+            }
+        });
     }
 
     public void doAnimation(){
         //guiTrick.doAnimation();
         AnimatorSet cardPlayer = new AnimatorSet();
         cardPlayer.play(yAnim);
+        cardPlayer.play(yAnimH);
         cardPlayer.setDuration(500);
         cardPlayer.start();
     }

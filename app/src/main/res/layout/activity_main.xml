@@ -9,6 +9,18 @@
     tools:context=".MainActivity">
 
     <ImageView
+        android:contentDescription="First hidden Card on Table"
+        android:id="@+id/iv_table_h1"
+        android:layout_width="92dp"
+        android:layout_height="125dp"
+        android:layout_alignTop="@id/iv_table_0"
+        android:layout_alignLeft="@id/iv_table_0"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="-20dp"
+        android:padding="0dp"
+        android:src="@drawable/red_card_back"/>
+
+    <ImageView
         android:contentDescription="@string/card_table"
         android:id="@+id/iv_table_0"
         android:layout_width="92dp"
@@ -19,10 +31,10 @@
         android:src="@drawable/red_card_back"/>
 
     <ImageView
-        android:contentDescription="@string/table"
         android:id="@+id/iv_table"
         android:layout_width="3700dp"
-        android:layout_height="6666dp" />
+        android:layout_height="6666dp"
+        android:contentDescription="@string/table" />
 
     <ImageView
         android:id="@+id/iv_card_0"
@@ -34,66 +46,66 @@
         android:src="@drawable/red_card_back" />
 
     <ImageView
-        android:contentDescription="@string/card_second_first_player"
         android:id="@+id/iv_card_1"
         android:layout_width="92dp"
         android:layout_height="125dp"
         android:layout_alignParentBottom="true"
-        android:padding="0dp"
         android:layout_marginStart="0dp"
         android:layout_toEndOf="@id/iv_card_0"
+        android:contentDescription="@string/card_second_first_player"
+        android:padding="0dp"
         android:src="@drawable/red_card_back" />
 
     <ImageView
-        android:contentDescription="@string/card_third_first_player"
         android:id="@+id/iv_card_2"
         android:layout_width="92dp"
         android:layout_height="125dp"
-        android:padding="0dp"
         android:layout_alignParentBottom="true"
         android:layout_marginStart="0dp"
         android:layout_toEndOf="@id/iv_card_1"
+        android:contentDescription="@string/card_third_first_player"
+        android:padding="0dp"
         android:src="@drawable/red_card_back" />
 
     <ImageView
-        android:contentDescription="@string/card_fourth_first_player"
         android:id="@+id/iv_card_3"
         android:layout_width="92dp"
         android:layout_height="125dp"
         android:layout_alignParentBottom="true"
-        android:padding="0dp"
         android:layout_marginStart="0dp"
         android:layout_toEndOf="@id/iv_card_2"
+        android:contentDescription="@string/card_fourth_first_player"
+        android:padding="0dp"
         android:src="@drawable/red_card_back" />
 
     <ImageView
-        android:contentDescription="@string/card_fourth_second_player"
         android:id="@+id/iv_card_back_3"
         android:layout_width="92dp"
         android:layout_height="125dp"
         android:layout_alignParentTop="true"
         android:layout_marginStart="0dp"
         android:layout_toEndOf="@id/iv_card_2"
+        android:contentDescription="@string/card_fourth_second_player"
         android:src="@drawable/red_card_back" />
 
     <ImageView
-        android:contentDescription="@string/card_third_second_player"
         android:id="@+id/iv_card_back_2"
         android:layout_width="92dp"
         android:layout_height="125dp"
         android:layout_alignParentTop="true"
         android:layout_marginStart="0dp"
         android:layout_toEndOf="@id/iv_card_1"
+        android:contentDescription="@string/card_third_second_player"
         android:src="@drawable/red_card_back" />
 
     <ImageView
-        android:contentDescription="@string/card_second_second_player"
         android:id="@+id/iv_card_back_1"
         android:layout_width="92dp"
         android:layout_height="125dp"
         android:layout_alignParentTop="true"
         android:layout_marginStart="0dp"
         android:layout_toEndOf="@id/iv_card_0"
+        android:contentDescription="@string/card_second_second_player"
         android:src="@drawable/red_card_back" />
 
     <ImageView
