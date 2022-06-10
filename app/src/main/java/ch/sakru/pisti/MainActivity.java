@@ -1,6 +1,9 @@
 package ch.sakru.pisti;
 
 
+import com.example.pisti.gui.Animation;
+import com.example.pisti.gui.Animation.*;
+
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import android.animation.Animator;
