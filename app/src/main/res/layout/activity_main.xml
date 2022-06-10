@@ -3,8 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/root_layout_id"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
     android:padding="20dp"
+    android:layout_height="match_parent"
+
     tools:context=".MainActivity">
 
     <ImageView
@@ -14,6 +15,7 @@
         android:layout_height="125dp"
         android:layout_centerInParent="true"
         android:layout_marginStart="0dp"
+        android:padding="0dp"
         android:src="@drawable/red_card_back"/>
 
     <ImageView
@@ -23,11 +25,12 @@
         android:layout_height="6666dp" />
 
     <ImageView
-        android:contentDescription="@string/card_first_first_player"
         android:id="@+id/iv_card_0"
         android:layout_width="92dp"
         android:layout_height="125dp"
         android:layout_alignParentBottom="true"
+        android:padding="0dp"
+        android:contentDescription="@string/card_first_first_player"
         android:src="@drawable/red_card_back" />
 
     <ImageView
@@ -36,6 +39,7 @@
         android:layout_width="92dp"
         android:layout_height="125dp"
         android:layout_alignParentBottom="true"
+        android:padding="0dp"
         android:layout_marginStart="0dp"
         android:layout_toEndOf="@id/iv_card_0"
         android:src="@drawable/red_card_back" />
@@ -45,6 +49,7 @@
         android:id="@+id/iv_card_2"
         android:layout_width="92dp"
         android:layout_height="125dp"
+        android:padding="0dp"
         android:layout_alignParentBottom="true"
         android:layout_marginStart="0dp"
         android:layout_toEndOf="@id/iv_card_1"
@@ -56,6 +61,7 @@
         android:layout_width="92dp"
         android:layout_height="125dp"
         android:layout_alignParentBottom="true"
+        android:padding="0dp"
         android:layout_marginStart="0dp"
         android:layout_toEndOf="@id/iv_card_2"
         android:src="@drawable/red_card_back" />
@@ -107,12 +113,14 @@
         android:layout_centerInParent="true"
         android:layout_marginVertical="300dp"
         android:src="@drawable/settings" />
+
     <ImageView
         android:id="@+id/iv_help"
         android:layout_width="22dp"
         android:layout_height="22dp"
         android:layout_alignParentRight="true"
-        android:layout_marginVertical="340dp"
+        android:layout_alignBottom="@id/iv_settings"
+        android:layout_marginBottom="-40dp"
         android:src="@drawable/help" />
 
     <TextView
