@@ -2,6 +2,7 @@ package ch.sakru.pisti.deck;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Random;
 
 public class Deck {
 
@@ -60,7 +61,7 @@ public class Deck {
 
     public void shuffleDeck(){
 //        Collections.shuffle(list);
-        Collections.shuffle(cardDeck);
+        Collections.shuffle(cardDeck, new Random(2));
     }
 
   //  public ArrayList<Integer> getList(){

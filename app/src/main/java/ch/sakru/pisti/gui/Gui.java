@@ -15,10 +15,6 @@ public class Gui {
         animationView = new ArrayList<>();
     }
 
-    public String getInput(){
-        Scanner scanner  = new Scanner(System.in);
-        return scanner.nextLine();
-    }
     public void addAnimation(Animation animation, View view){
         animationSequence.add(animation);
         animationView.add(view);

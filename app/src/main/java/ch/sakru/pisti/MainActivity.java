@@ -201,11 +201,16 @@ public class MainActivity extends AppCompatActivity {
 
         guiTable.setContext(getApplicationContext());
         guiTable.createView();
+
         guiTable.setImageTable(findViewById(R.id.iv_table_0));
-        guiTable.setImageHiddenCard(findViewById(R.id.iv_table_h1));
         guiTable.imageTable.requestLayout();
         guiTable.imageTable.getLayoutParams().width = layoutWidth;
         guiTable.imageTable.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+
+        guiTable.setImageHiddenCard(findViewById(R.id.iv_table_h1));
+        guiTable.imageHiddenCard.requestLayout();
+        guiTable.imageHiddenCard.getLayoutParams().width = layoutWidth;
+
 
         // Player 1
         player1.setName("Senol");
@@ -340,7 +345,7 @@ public class MainActivity extends AppCompatActivity {
                 player.addPoints(10);
                 game.setPlayerMadeLastTrick(player);
                 //Animation of trick
-                gui.addAnimation(Animation.PISTI, null);
+                //gui.addAnimation(Animation.PISTI, null);
                 playPlayerPisti(player);
             } else
             if (game.isItATrick(table)) {
@@ -511,7 +516,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void playAnimation3(View view){
-        guiTable.initAnimation(1000, 0);
+        guiTable.initTrickAnimation(1000, 0);
         animatorListenerAdapter = new AnimatorListenerAdapter() {
             public void onAnimationEnd(Animator animation) {
                 gui.removeFirstAnimation();
@@ -519,11 +524,11 @@ public class MainActivity extends AppCompatActivity {
             }
         };
         guiTable.addListener(animatorListenerAdapter);
-        guiTable.doAnimation();
+        guiTable.doTrickAnimation();
     }
 
     private void playAnimation4(View view){
-        guiTable.initAnimation(-1000, 0);
+        guiTable.initTrickAnimation(-1000, 0);
         animatorListenerAdapter = new AnimatorListenerAdapter() {
             public void onAnimationEnd(Animator animation) {
                 gui.removeFirstAnimation();
@@ -531,11 +536,11 @@ public class MainActivity extends AppCompatActivity {
             }
         };
         guiTable.addListener(animatorListenerAdapter);
-        guiTable.doAnimation();
+        guiTable.doTrickAnimation();
     }
 
     private void playAnimation9(View view){
-        guiTable.initAnimation(1000, 90);
+        guiTable.initPistiAnimation(1000, 90);
         animatorListenerAdapter = new AnimatorListenerAdapter() {
             public void onAnimationEnd(Animator animation) {
                 gui.removeFirstAnimation();
@@ -543,11 +548,11 @@ public class MainActivity extends AppCompatActivity {
             }
         };
         guiTable.addListener(animatorListenerAdapter);
-        guiTable.doAnimation();
+        guiTable.doPistiAnimation();
     }
 
     private void playAnimation10(View view){
-        guiTable.initAnimation(-1000, 90);
+        guiTable.initPistiAnimation(-1000, 90);
         animatorListenerAdapter = new AnimatorListenerAdapter() {
             public void onAnimationEnd(Animator animation) {
                 gui.removeFirstAnimation();
@@ -555,7 +560,7 @@ public class MainActivity extends AppCompatActivity {
             }
         };
         guiTable.addListener(animatorListenerAdapter);
-        guiTable.doAnimation();
+        guiTable.doPistiAnimation();
     }
 
 
@@ -575,11 +580,11 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void playAnimation5(View view){
+    /*private void playAnimation5(View view){
         guiTable.pistiAnimation(textPisti);
         gui.removeFirstAnimation();
         playNextAnimation();
-    }
+    }*/
 
     private void playAnimation6(View view){
         // Show Points
@@ -629,7 +634,7 @@ public class MainActivity extends AppCompatActivity {
             case  PLAYER2_PLAY: playAnimation2(gui.getAnimationView(0));  break;
             case  PLAYER1_TRICK: playAnimation3(gui.getAnimationView(0));  break;
             case  PLAYER2_TRICK: playAnimation4(gui.getAnimationView(0));  break;
-            case  PISTI: playAnimation5(gui.getAnimationView(0));  break;
+            //case  PISTI: playAnimation5(gui.getAnimationView(0));  break;
             case  SHOW_ROUND_SCORE: playAnimation6(gui.getAnimationView(0));  break;
             case  SHOW_HIDDEN_CARDS: playAnimation7(gui.getAnimationView(0));  break;
             case SHOW_GAME_SCORE: playAnimation8(gui.getAnimationView(0)); break;

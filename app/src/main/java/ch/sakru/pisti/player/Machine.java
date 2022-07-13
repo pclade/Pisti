@@ -120,7 +120,7 @@ public class Machine extends Player {
     // TODO: if there is a possible pisti with a card which has points, then select this card instead of an other card with the same name, but without points
     // TODO: Example: a pisti with a caro 10 (13 Points) ist more reliable then with cross 10 (10 Points)
     private Card playForTrick(Card topCardOnTable){
-        // Maybe it's a ch.sakru.pisti, when there is only one card on the table.
+        // Maybe it's a Pisti, when there is only one card on the table.
         if(topCardOnTable == null)
             return null;
         Card cardToPlay = null;
