@@ -2,7 +2,6 @@ package ch.sakru.pisti;
 
 
 import ch.sakru.pisti.gui.Animation;
-import ch.sakru.pisti.gui.Animation.*;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,7 +13,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Point;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.Display;
@@ -28,7 +26,6 @@ import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import ch.sakru.pisti.gui.Animation;
 import ch.sakru.pisti.deck.Card;
 import ch.sakru.pisti.deck.Deck;
 import ch.sakru.pisti.game.Game;
@@ -39,7 +36,6 @@ import ch.sakru.pisti.gui.GuiTable;
 import ch.sakru.pisti.player.Machine;
 import ch.sakru.pisti.player.Player;
 import ch.sakru.pisti.player.Table;
-import ch.sakru.pisti.R;
 
 import java.util.ArrayList;
 
@@ -540,7 +536,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void playAnimation9(View view){
-        guiTable.initPistiAnimation(1000, 90);
+        guiTable.initPistiAnimation(1000);
         animatorListenerAdapter = new AnimatorListenerAdapter() {
             public void onAnimationEnd(Animator animation) {
                 gui.removeFirstAnimation();
@@ -552,7 +548,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void playAnimation10(View view){
-        guiTable.initPistiAnimation(-1000, 90);
+        guiTable.initPistiAnimation(-1000);
         animatorListenerAdapter = new AnimatorListenerAdapter() {
             public void onAnimationEnd(Animator animation) {
                 gui.removeFirstAnimation();
