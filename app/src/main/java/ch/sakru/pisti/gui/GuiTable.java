@@ -5,13 +5,13 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
-import android.os.CountDownTimer;
+//import android.os.CountDownTimer;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
+//import android.widget.RelativeLayout;
+//import android.widget.TextView;
 
-import ch.sakru.pisti.R;
+// import ch.sakru.pisti.R;
 import ch.sakru.pisti.deck.Deck;
 
 public class GuiTable {
@@ -19,12 +19,12 @@ public class GuiTable {
     private Context context;
     public ImageView imageTable;
     public ImageView imageHiddenCard;
-    private RelativeLayout layout;
-    private float x;
-    private float y;
+    // private RelativeLayout layout;
+    // private float x;
+    // private float y;
     private ObjectAnimator yAnim;
     private ObjectAnimator yAnimH;
-    private GuiTrick guiTrick;
+    // private GuiTrick guiTrick;
 
     public GuiTable(){
     }
@@ -45,9 +45,9 @@ public class GuiTable {
         imageHiddenCard = imageView;
     }
 
-    public ImageView getImageTable(){
-        return imageTable;
-    }
+    //public ImageView getImageTable(){
+    //    return imageTable;
+    //}
 
     public void showCard(Integer cardNr, GuiDeck guiDeck, Deck deck){
         Integer CardId = guiDeck.getCardID(cardNr, deck);
@@ -59,12 +59,12 @@ public class GuiTable {
         imageHiddenCard.setVisibility(View.VISIBLE);
     }
 
-    public float getY(){
-        return imageTable.getY();
-    }
-    public float getX(){
-        return imageTable.getX();
-    }
+    //public float getY(){
+//        return imageTable.getY();
+  //  }
+    //public float getX(){
+      //  return imageTable.getX();
+   // }
 
     public  void addListener(AnimatorListenerAdapter animatorListenerAdapter){
         yAnim.addListener(animatorListenerAdapter);
@@ -122,7 +122,7 @@ public class GuiTable {
         cardPlayer.start();
     }
 
-    public void initPistiAnimation(float screenY, float rotation){
+    public void initPistiAnimation(float screenY){
         //guiTrick.initAnimation(sourceView, destinationView);
         float saveX;
         float saveY;
@@ -171,12 +171,12 @@ public class GuiTable {
         AnimatorSet cardPlayer = new AnimatorSet();
         cardPlayer.play(yAnim);
         cardPlayer.play(yAnimH);
-        cardPlayer.setDuration(800);
+        cardPlayer.setDuration(850);
         cardPlayer.start();
     }
 
 
-    public void pistiAnimation(TextView view){
+    /* public void pistiAnimation(TextView view){
         view.setVisibility(View.VISIBLE);
         CountDownTimer timer = new CountDownTimer(500, 500) {
             @Override
@@ -187,5 +187,5 @@ public class GuiTable {
                 view.setVisibility(View.GONE); //(or GONE)
             }
         }.start();
-    }
+    }*/
 }
