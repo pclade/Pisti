@@ -119,19 +119,19 @@ public class MainActivity extends AppCompatActivity {
 
         ImageView iv;
 
-        iv = (ImageView) findViewById(R.id.iv_card_0);
+        iv = findViewById(R.id.iv_card_0);
         cardResourcesP1.add(iv);
         iv.requestLayout();
         iv.getLayoutParams().width = layoutWidth;
         iv.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
 
-        iv = (ImageView) findViewById(R.id.iv_card_1);
+        iv = findViewById(R.id.iv_card_1);
         cardResourcesP1.add(iv);
         iv.requestLayout();
         iv.getLayoutParams().width = layoutWidth;
         iv.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
 
-        iv = (ImageView) findViewById(R.id.iv_card_2);
+        iv = findViewById(R.id.iv_card_2);
         cardResourcesP1.add(iv);
         iv.requestLayout();
         iv.getLayoutParams().width = layoutWidth;

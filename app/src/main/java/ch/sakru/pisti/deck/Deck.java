@@ -61,7 +61,7 @@ public class Deck {
 
     public void shuffleDeck(){
 //        Collections.shuffle(list);
-        Collections.shuffle(cardDeck, new Random(2));
+        Collections.shuffle(cardDeck, new Random() );
     }
 
   //  public ArrayList<Integer> getList(){
