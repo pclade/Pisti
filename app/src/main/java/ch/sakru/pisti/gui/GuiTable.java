@@ -12,7 +12,7 @@ import android.widget.ImageView;
 //import android.widget.TextView;
 
 // import ch.sakru.pisti.R;
-import ch.sakru.pisti.deck.Deck;
+import ch.sakru.cards.Deck;
 
 public class GuiTable {
 

@@ -1,18 +1,11 @@
-package ch.sakru.pisti.deck;
+package ch.sakru.cards;
 
 public class Card {
-    private Integer cardNumber; // It's a sequential Number in the unsorted Deck.
+    private Integer cardNumber; // Stable identity; selected card sets may have gaps.
     private String name;
     private Integer weight;
     private Integer point=0;
     String suite;
-
-    public Card(Integer cardNumber, Suite suite, String name, int weight){
-        this.cardNumber = cardNumber;
-        //this.suite = suite;
-        this.name = name;
-        this.weight= weight;
-    }
 
     public Card(Integer cardNumber){
         this.cardNumber = cardNumber;
@@ -31,10 +24,6 @@ public class Card {
     public Integer getCardNumber(){
         return cardNumber;
     }
-
-    // public void setSuite(Suite suite){
-    //    this.suite=suite;
-    // }
 
     public void setPoint(Integer point){
         this.point = point;

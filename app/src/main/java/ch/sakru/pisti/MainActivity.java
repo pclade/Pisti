@@ -27,8 +27,9 @@ import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import ch.sakru.pisti.deck.Card;
-import ch.sakru.pisti.deck.Deck;
+import ch.sakru.cards.Card;
+import ch.sakru.cards.CardSet;
+import ch.sakru.cards.Deck;
 import ch.sakru.pisti.game.Game;
 import ch.sakru.pisti.gui.Gui;
 import ch.sakru.pisti.gui.GuiDeck;
@@ -190,10 +191,7 @@ public class MainActivity extends AppCompatActivity {
         game.setStrDoublePoint(getString(R.string.str_double_point));
         game.setStrCRLF(getString(R.string.str_CRLF));
         // Create Deck object
-        deck = new Deck();
-        //TODO: DEBUG
-        //deck.setDeckSize(28);
-        //
+        deck = new Deck(CardSet.french52());
         player1 = new Player();
         player2 = new Machine();
         table = new Table(getString(R.string.table));

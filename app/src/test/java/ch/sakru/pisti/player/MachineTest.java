@@ -1,6 +1,6 @@
 package ch.sakru.pisti.player;
 
-import ch.sakru.pisti.deck.Card;
+import ch.sakru.cards.Card;
 import ch.sakru.pisti.game.Game;
 import org.junit.Test;
 

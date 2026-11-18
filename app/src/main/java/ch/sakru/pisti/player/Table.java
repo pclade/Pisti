@@ -1,6 +1,6 @@
 package ch.sakru.pisti.player;
 
-import ch.sakru.pisti.deck.Card;
+import ch.sakru.cards.Card;
 
 public class Table extends Player{
 

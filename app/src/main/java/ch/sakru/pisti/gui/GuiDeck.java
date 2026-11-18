@@ -3,23 +3,25 @@ package ch.sakru.pisti.gui;
 import android.content.Context;
 import android.widget.ImageView;
 
-import ch.sakru.pisti.deck.Deck;
+import ch.sakru.cards.Deck;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class GuiDeck {
 
     public ArrayList<ImageView> cardImages;
-    public ArrayList<Integer> cardIds;
+    private final Map<Integer, Integer> cardIds;
 
     public GuiDeck(){
         cardImages = new ArrayList<>();
-        cardIds = new ArrayList<>();
+        cardIds = new HashMap<>();
     }
 
     public void createCards(Context context, Deck deck){
         while (cardImages.size()>0) {cardImages.remove(0);}
-        while (cardIds.size()>0) {cardIds.remove(0);}
+        cardIds.clear();
         for(int i = 0; i < deck.getDecSize(); i++){
             ImageView cardImage = new ImageView(context);
             int cardID;
@@ -28,7 +30,7 @@ public class GuiDeck {
             cardID = context.getResources().getIdentifier(cardName, "drawable", context.getPackageName());
             cardImage.setImageResource(cardID);
             cardImages.add(cardImage);
-            cardIds.add(cardID);
+            cardIds.put(cardNr, cardID);
         }
     }
 
