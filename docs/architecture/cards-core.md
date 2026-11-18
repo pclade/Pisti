@@ -3,6 +3,9 @@
 Das Gradle-Modul `:cards-core` ist reines Java und hat keine Android-Abhängigkeit.
 Die Pisti-App `:app` verwendet dessen `Card`, `CardSet` und `Deck`. Damit lassen
 sich Kartensätze und Mischfolgen auch in einem JVM-Simulator verwenden.
+Das Modul liegt für den ersten Umbau noch im Pisti-Repository. Die
+[Zielarchitektur](multi-game-architecture.md) sieht eine eigenständige,
+versionierte Bibliothek für beide Spiele vor.
 
 `CardSet.french52()` bildet den bisherigen Pisti-Kartensatz ab. Für die
 24-Karten-Variante von Altmışaltı kann ein zweites Spiel
