@@ -7,6 +7,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -65,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
 
     AnimatorListenerAdapter animatorListenerAdapter;
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -355,7 +357,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         else{ // Table is clean and the last card is played from Machine
-                // DO NOTHING
+            // DO NOTHING
         }
         if(game.finished()) {
             playGameFinished(player);

@@ -19,6 +19,7 @@
     <string name="card_second_second_player">"Second card on the hand of the machine</string>
     <string name="card_third_second_player">"Third card on the hand of the machine</string>
     <string name="card_fourth_second_player">"Fourth card on the hand of the machine</string>
+    <string name="settings">"Settings Icon</string>
     <string name="title_activity_help">Pişti</string>
     <string name="three_point_representation">+3</string>
     <string name="score_title_points">Points</string>
