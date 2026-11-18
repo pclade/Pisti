@@ -117,6 +117,19 @@
         android:layout_marginStart="0dp"
         android:src="@drawable/red_card_back" />
 
+    <TextView
+        android:id="@+id/machine_memory_debug"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/iv_card_back_0"
+        android:layout_marginTop="8dp"
+        android:background="#99000000"
+        android:padding="6dp"
+        android:textColor="@android:color/white"
+        android:textSize="12sp"
+        android:visibility="gone"
+        tools:text="0x1, 3x2, 1x3, 0x4, 4x5, 0x6, 0x7, 0x8, 0x9, 0x10, 0x11, 0x12, 0x13" />
+
     <ImageView
         android:contentDescription="@string/settings"
         android:id="@+id/iv_settings"

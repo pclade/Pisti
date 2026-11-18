@@ -60,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
     boolean semaphoreMachine;
 
     TextView textPisti;
+    TextView machineMemoryDebug;
     ImageView settings;
     ImageView help;
     String strScore;
@@ -71,6 +72,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        machineMemoryDebug = findViewById(R.id.machine_memory_debug);
+        if (BuildConfig.DEBUG) {
+            machineMemoryDebug.setVisibility(View.VISIBLE);
+        }
 
         settings = findViewById(R.id.iv_settings);
         settings.setOnClickListener((view) -> {
@@ -333,6 +339,7 @@ public class MainActivity extends AppCompatActivity {
     private void play(Card playedCard, Player player) {
         table.takeCard(playedCard);
         game.addCardToMemoryOfPlayers(playedCard);
+        updateMemoryDisplay();
         table.setTopCardOnTable(playedCard);
 
         // Check game Rules, if it's a trick.
@@ -365,6 +372,12 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private void updateMemoryDisplay() {
+        if (BuildConfig.DEBUG) {
+            machineMemoryDebug.setText(player2.getMemorySummary());
+        }
+    }
+
     public void nextRound() {
         game.setPlayerMadeLastTrick(null);
         game.setTrickCount(0);
@@ -379,6 +392,7 @@ public class MainActivity extends AppCompatActivity {
         guiTable.ShowHiddenCard();
         // Every Player memorizes the top card on the table
         game.addCardToMemoryOfPlayers(table.getTheTopCard());
+        updateMemoryDisplay();
         deal();// Code here executes on main thread after user presses button
     }
 
@@ -396,6 +410,7 @@ public class MainActivity extends AppCompatActivity {
         guiTable.ShowHiddenCard();
         // Every Player memorizes the top card on the table
         game.addCardToMemoryOfPlayers(table.getTheTopCard());
+        updateMemoryDisplay();
         deal();// Code here executes on main thread after user presses button
     }
 

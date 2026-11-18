@@ -58,6 +58,25 @@ public class MachineTest {
     }
 
     @Test
+    public void debugSummaryCountsOnlyRevealedCardsFromAceToKing() {
+        Machine machine = new Machine();
+        machine.takeCard(card(0, "A"));
+        machine.takeCard(card(8, "9"));
+        machine.addCardToMemory(card(1, "2"));
+        machine.addCardToMemory(card(14, new String("2")));
+        machine.addCardToMemory(card(27, "2"));
+        machine.addCardToMemory(card(1, "2"));
+        machine.addCardToMemory(card(4, "5"));
+
+        assertEquals("0x1, 3x2, 0x3, 0x4, 1x5, 0x6, 0x7, 0x8, 0x9, "
+                + "0x10, 0x11, 0x12, 0x13", machine.getMemorySummary());
+
+        machine.cleanMemories();
+        assertEquals("0x1, 0x2, 0x3, 0x4, 0x5, 0x6, 0x7, 0x8, 0x9, "
+                + "0x10, 0x11, 0x12, 0x13", machine.getMemorySummary());
+    }
+
+    @Test
     public void matchingRankWorksForDifferentStringInstances() {
         Machine machine = new Machine();
         Card match = card(7, new String("7"));

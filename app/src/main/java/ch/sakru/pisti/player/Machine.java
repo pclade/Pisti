@@ -9,8 +9,12 @@ import java.util.Map;
 
 public class Machine extends Player {
 
-    // Known cards include the machine's hand and cards visible on the table.
-    // A card can be observed twice (in hand and when played), but must only count once.
+    private static final String[] RANKS = {
+            "A", "2", "3", "4", "5", "6", "7", "8", "9", "T", "J", "Q", "K"
+    };
+
+    // Only cards revealed on the table are recorded here. The machine also knows
+    // its current hand, which is considered separately when choosing a card.
     private final Map<Integer, Card> memoryOfCards;
     private ArrayList<String> machineNames;
 
@@ -57,7 +61,34 @@ public class Machine extends Player {
                 count++;
             }
         }
+        for (Card handCard : getHand()) {
+            if (handCard != null && card.getName().equals(handCard.getName())) {
+                count++;
+            }
+        }
         return count;
+    }
+
+    /** Counts publicly revealed ranks in this deck, from ace (1) to king (13). */
+    public String getMemorySummary() {
+        int[] counts = new int[RANKS.length];
+        for (Card knownCard : memoryOfCards.values()) {
+            for (int i = 0; i < RANKS.length; i++) {
+                if (RANKS[i].equals(knownCard.getName())) {
+                    counts[i]++;
+                    break;
+                }
+            }
+        }
+
+        StringBuilder summary = new StringBuilder();
+        for (int i = 0; i < counts.length; i++) {
+            if (i > 0) {
+                summary.append(", ");
+            }
+            summary.append(counts[i]).append('x').append(i + 1);
+        }
+        return summary.toString();
     }
 
     // Play a rank with the most known cards, reducing the chance of an opposing match.
@@ -140,12 +171,6 @@ public class Machine extends Player {
             }
         }
         return null;
-    }
-
-    @Override
-    public void takeCard(Card card) {
-        super.takeCard(card);
-        addCardToMemory(card);
     }
 
     @Override
