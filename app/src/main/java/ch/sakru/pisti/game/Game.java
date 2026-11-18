@@ -1,7 +1,7 @@
 package ch.sakru.pisti.game;
 
-import ch.sakru.pisti.deck.Card;
-import ch.sakru.pisti.deck.Deck;
+import ch.sakru.cards.Card;
+import ch.sakru.cards.Deck;
 import ch.sakru.pisti.player.Player;
 
 import java.util.ArrayList;
@@ -133,7 +133,7 @@ public class Game {
     public boolean isItATrick(Player table){
         int maxCardOnTable = table.getHand().size();
         if(maxCardOnTable >= 2){
-          if(deck.isJack(table.getHand().get(maxCardOnTable-1))){
+          if("J".equals(table.getHand().get(maxCardOnTable-1).getName())){
               table.setTopCardOnTable(null);
               return true;
           }
@@ -231,19 +231,19 @@ public class Game {
       Integer amountOfCards = deck.getDecSize();
       for(Integer i=0; i< amountOfCards; i++) {
           Card card = deck.getCardDeck().get(i);
-          if(deck.isCaro(card) && deck.isTen(card)){
+          if("♦".equals(card.getSuite()) && "T".equals(card.getName())){
               card.setPoint(3);
           }
           else
-          if(deck.isCross(card) && deck.isTwo(card)){
+          if("♣".equals(card.getSuite()) && "2".equals(card.getName())){
               card.setPoint(2);
           }
           else
-          if(deck.isAs(card)){
+          if("A".equals(card.getName())){
               card.setPoint(1);
           }
           else
-          if(deck.isJack(card)){
+          if("J".equals(card.getName())){
               card.setPoint(1);
           }
       }

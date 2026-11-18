@@ -3,8 +3,8 @@ package ch.sakru.pisti.gui;
 import android.animation.AnimatorListenerAdapter;
 import android.view.View;
 import android.widget.ImageView;
-import ch.sakru.pisti.deck.Card;
-import ch.sakru.pisti.deck.Deck;
+import ch.sakru.cards.Card;
+import ch.sakru.cards.Deck;
 import ch.sakru.pisti.R;
 
 import java.util.ArrayList;
