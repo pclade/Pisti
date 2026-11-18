@@ -62,6 +62,8 @@ public class MainActivity extends AppCompatActivity {
 
     boolean semaphoreMachine;
     boolean machineStartsRound;
+    private boolean machineLeadingNewHand;
+    private ImageView pendingHumanCardView;
     private Runnable pendingOpeningMove;
 
     TextView textPisti;
@@ -238,6 +240,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
+        clearPendingHumanCard();
         if (pendingOpeningMove != null && guiTable != null && guiTable.imageTable != null) {
             guiTable.imageTable.removeCallbacks(pendingOpeningMove);
             pendingOpeningMove = null;
@@ -247,8 +250,26 @@ public class MainActivity extends AppCompatActivity {
 
     private View.OnClickListener clickListener = new View.OnClickListener() {
         public void onClick(View view) {
-            if (semaphoreMachine == true)
+            // An empty animation queue means the human turn is ready, even if
+            // a previous transition left the input flag set.
+            if (semaphoreMachine && gui.getAnimationSize() == 0 && pendingOpeningMove == null) {
+                semaphoreMachine = false;
+                machineLeadingNewHand = false;
+                clearPendingHumanCard();
+            }
+            if (semaphoreMachine) {
+                // The new hand is already visible while the machine leads it.
+                // Keep one early human tap instead of silently dropping it.
+                if (machineLeadingNewHand && pendingOpeningMove == null
+                        && !game.finished() && pendingHumanCardView == null) {
+                    int cardIndex = guiPlayer1.getCardNrFromView((ImageView) view);
+                    if (player1.getHand().get(cardIndex) != null) {
+                        pendingHumanCardView = (ImageView) view;
+                        pendingHumanCardView.setAlpha(0.65f);
+                    }
+                }
                 return;
+            }
             semaphoreMachine = true;
             Integer cardNr = guiPlayer1.getCardNrFromView((ImageView) view);
             Card playedCard = player1.play(cardNr, table.getTopCardOnTable());
@@ -274,6 +295,7 @@ public class MainActivity extends AppCompatActivity {
 
     private boolean deal() {
         if (!game.finished() && game.handsEmpty()) {
+            clearPendingHumanCard();
             game.dealCards(player1);
             game.dealCards(player2);
             guiPlayer1.showCards(player1.getHand(), guiDeck, deck);
@@ -405,6 +427,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void startRound() {
+        clearPendingHumanCard();
+        machineLeadingNewHand = false;
         game.setPlayerMadeLastTrick(null);
         game.setTrickCount(0);
         deck.createCards();
@@ -421,7 +445,15 @@ public class MainActivity extends AppCompatActivity {
         updateMemoryDisplay();
         if (deal() && machineStartsRound) {
             semaphoreMachine = true;
+            machineLeadingNewHand = true;
             gui.addAnimation(Animation.OPENING_CARD_PAUSE, null);
+        }
+    }
+
+    private void clearPendingHumanCard() {
+        if (pendingHumanCardView != null) {
+            pendingHumanCardView.setAlpha(1f);
+            pendingHumanCardView = null;
         }
     }
 
@@ -667,11 +699,18 @@ public class MainActivity extends AppCompatActivity {
         if(gui.getAnimationSize()==0) {
             // In a machine-led round it also leads each new four-card hand.
             if (deal() && machineStartsRound) {
+                machineLeadingNewHand = true;
                 queueMachineTurn();
                 playNextAnimation();
                 return;
             }
             semaphoreMachine = false;
+            machineLeadingNewHand = false;
+            ImageView queuedCard = pendingHumanCardView;
+            clearPendingHumanCard();
+            if (queuedCard != null) {
+                queuedCard.performClick();
+            }
             return;
         }
         switch (gui.getAnimationSequence(0)) {
