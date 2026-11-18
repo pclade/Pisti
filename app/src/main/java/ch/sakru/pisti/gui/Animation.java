@@ -10,7 +10,8 @@ public enum Animation {
     SHOW_GAME_SCORE,
     SHOW_HIDDEN_CARDS,
     PLAYER1_PISTI,
-    PLAYER2_PISTI
+    PLAYER2_PISTI,
+    OPENING_CARD_PAUSE
 }
 
 //  1: Player 1 Plays card to Table
@@ -23,3 +24,4 @@ public enum Animation {
 //  8: It's the first trick in round and it's player1, then show hidden cards to him.
 //  9: Player 1 Pisti animation
 // 10: Player 2 Pisti animation
+// 11: Let the opening table card remain visible before the machine's first move.

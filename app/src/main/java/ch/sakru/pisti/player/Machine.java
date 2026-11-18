@@ -4,14 +4,22 @@ import ch.sakru.pisti.deck.Card;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Machine extends Player {
 
-    private ArrayList<Card> memoryOfCards;
+    private static final String[] RANKS = {
+            "A", "2", "3", "4", "5", "6", "7", "8", "9", "T", "J", "Q", "K"
+    };
+
+    // Only cards revealed on the table are recorded here. The machine also knows
+    // its current hand, which is considered separately when choosing a card.
+    private final Map<Integer, Card> memoryOfCards;
     private ArrayList<String> machineNames;
 
     public Machine(){
-        memoryOfCards = new ArrayList<>();
+        memoryOfCards = new HashMap<>();
         machineNames = new ArrayList<>();
         machineNames.add("Ati");
         machineNames.add("Senol");
@@ -41,53 +49,67 @@ public class Machine extends Player {
     }
     @Override
     public void addCardToMemory(Card card){
-        memoryOfCards.add(card);
-    }
-
-    /*
-    private Card getCardOnTopOfMemory(){
-        Integer topCardIndex = memoryOfCards.size();
-        if(topCardIndex > 0)
-          return memoryOfCards.get(topCardIndex-1);
-        return null;
-    }
-
-     */
-
-    private Integer getAmountOfCardNameInMemory(Card card){
-        Integer amountOfCardNameInMemory = 0;
-        for(int i = 0; i< memoryOfCards.size(); i++){
-            Card cardInMemory = memoryOfCards.get(i);
-            if(cardInMemory.getName() == card.getName())
-                amountOfCardNameInMemory++;
+        if (card != null) {
+            memoryOfCards.put(card.getCardNumber(), card);
         }
-        return amountOfCardNameInMemory;
     }
 
-    //Strategy: Play the most played card already, to avoid a trick or ch.sakru.pisti.
-    private Card playMostPlayedCard() {
-        int indexOfMaxPlayedCard=0;
-        ArrayList<Integer> numberOfTimesPlayed;
+    private int getAmountOfCardNameInMemory(Card card){
+        int count = 0;
+        for (Card knownCard : memoryOfCards.values()) {
+            if (card.getName().equals(knownCard.getName())) {
+                count++;
+            }
+        }
+        for (Card handCard : getHand()) {
+            if (handCard != null && card.getName().equals(handCard.getName())) {
+                count++;
+            }
+        }
+        return count;
+    }
 
-        numberOfTimesPlayed = new ArrayList<>();
-        Card cardToPlay;
-        for (int i = 0; i < getHand().size(); i++) {
-            Card card = getHand().get(i);
-            if((card != null) && (card.getName() != "J")){
-                Integer j = getAmountOfCardNameInMemory(card);
-                numberOfTimesPlayed.add(j);
-                for (Integer m = 0; m < numberOfTimesPlayed.size(); m++) {
-                    if (numberOfTimesPlayed.get(m) > numberOfTimesPlayed.get(indexOfMaxPlayedCard)) {
-                        indexOfMaxPlayedCard = m;
-                    }
+    /** Counts publicly revealed ranks in this deck, from ace (1) to king (13). */
+    public String getMemorySummary() {
+        int[] counts = new int[RANKS.length];
+        for (Card knownCard : memoryOfCards.values()) {
+            for (int i = 0; i < RANKS.length; i++) {
+                if (RANKS[i].equals(knownCard.getName())) {
+                    counts[i]++;
+                    break;
                 }
             }
-            else{
-                numberOfTimesPlayed.add(-1);
+        }
+
+        StringBuilder summary = new StringBuilder();
+        for (int i = 0; i < counts.length; i++) {
+            if (i > 0) {
+                summary.append(", ");
+            }
+            summary.append(counts[i]).append('x').append(i + 1);
+        }
+        return summary.toString();
+    }
+
+    // Play a rank with the most known cards, reducing the chance of an opposing match.
+    private Card playMostPlayedCard() {
+        int bestIndex = -1;
+        int bestCount = -1;
+        for (int i = 0; i < getHand().size(); i++) {
+            Card card = getHand().get(i);
+            if (card != null && !"J".equals(card.getName())) {
+                int count = getAmountOfCardNameInMemory(card);
+                if (count > bestCount) {
+                    bestIndex = i;
+                    bestCount = count;
+                }
             }
         }
-        setPlayedCardInHand(indexOfMaxPlayedCard);
-        cardToPlay = getHand().get(indexOfMaxPlayedCard);
+        if (bestIndex < 0) {
+            return null;
+        }
+        setPlayedCardInHand(bestIndex);
+        Card cardToPlay = getHand().get(bestIndex);
         setPlayedCard(cardToPlay);
         return cardToPlay;
     }
@@ -97,7 +119,7 @@ public class Machine extends Player {
         Card cardToPlay = null;
         for (Integer i = 0; i < getHand().size(); i++) {
             Card card = getHand().get(i);
-            if ((card != null) && (card.getName() != "J")) {
+            if ((card != null) && (!"J".equals(card.getName()))) {
                 setPlayedCardInHand(i);
                 cardToPlay = card;
                 setPlayedCard(cardToPlay);
@@ -126,7 +148,7 @@ public class Machine extends Player {
         Card cardToPlay = null;
         for(Integer i=0; i< getHand().size();i++) {
             Card card = getHand().get(i);
-            if ((card != null) && (card.getName() == topCardOnTable.getName())) {
+            if ((card != null) && card.getName().equals(topCardOnTable.getName())) {
                 cardToPlay = card;
                 setPlayedCardInHand(i);
                 setPlayedCard(cardToPlay);
@@ -142,7 +164,7 @@ public class Machine extends Player {
             return null;
         for(Integer i=0; i< getHand().size();i++) {
             cardToPlay = getHand().get(i);
-            if ((cardToPlay!= null) && (cardToPlay.getName() == "J")) {
+            if ((cardToPlay!= null) && "J".equals(cardToPlay.getName())) {
                 setPlayedCardInHand(i);
                 setPlayedCard(cardToPlay);
                 return cardToPlay;
@@ -152,9 +174,9 @@ public class Machine extends Player {
     }
 
     @Override
-    public void takeCard(Card card) {
-        super.takeCard(card);
-        addCardToMemory(card);
+    public void cleanMemories() {
+        super.cleanMemories();
+        memoryOfCards.clear();
     }
 
 
@@ -173,9 +195,10 @@ public class Machine extends Player {
     }
 
     public void setName(String pName){
-        for(Integer i=0;i<machineNames.size();i++){
-            if(machineNames.get(i) != pName){
-                super.setName(machineNames.get(i));
+        for (String candidate : machineNames) {
+            if (!candidate.equals(pName)) {
+                super.setName(candidate);
+                return;
             }
         }
     }

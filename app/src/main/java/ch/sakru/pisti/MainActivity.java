@@ -43,6 +43,8 @@ import java.util.ArrayList;
 //public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 public class MainActivity extends AppCompatActivity {
 
+    private static final long OPENING_CARD_PAUSE_MS = 1500L;
+
     ArrayList<ImageView> cardResourcesP1 = new ArrayList<ImageView>();
     ArrayList<ImageView> cardResourcesP2 = new ArrayList<ImageView>();
 
@@ -58,8 +60,11 @@ public class MainActivity extends AppCompatActivity {
     GuiDeck guiDeck;
 
     boolean semaphoreMachine;
+    boolean machineStartsRound;
+    private Runnable pendingOpeningMove;
 
     TextView textPisti;
+    TextView machineMemoryDebug;
     ImageView settings;
     ImageView help;
     String strScore;
@@ -71,6 +76,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        machineMemoryDebug = findViewById(R.id.machine_memory_debug);
+        if (BuildConfig.DEBUG) {
+            machineMemoryDebug.setVisibility(View.VISIBLE);
+        }
 
         settings = findViewById(R.id.iv_settings);
         settings.setOnClickListener((view) -> {
@@ -228,6 +238,15 @@ public class MainActivity extends AppCompatActivity {
         textPisti = (TextView) findViewById(R.id.pisti);
     }
 
+    @Override
+    protected void onDestroy() {
+        if (pendingOpeningMove != null && guiTable != null && guiTable.imageTable != null) {
+            guiTable.imageTable.removeCallbacks(pendingOpeningMove);
+            pendingOpeningMove = null;
+        }
+        super.onDestroy();
+    }
+
     private View.OnClickListener clickListener = new View.OnClickListener() {
         public void onClick(View view) {
             if (semaphoreMachine == true)
@@ -244,30 +263,35 @@ public class MainActivity extends AppCompatActivity {
             }
             gui.addAnimation(Animation.PLAYER1_PLAY, view);
             play(playedCard, player1);
-            //
-            playedCard = player2.playMachine(table.getTopCardOnTable());
-            if (playedCard == null){ // Clicked on a previously played card
-                semaphoreMachine = false;
-                return;
+
+            // When the machine leads, its fourth card has already been played
+            // before the human's fourth card. The next deal then starts it again.
+            if (!game.finished() && !player2.isEmptyHand()) {
+                queueMachineTurn();
             }
-            gui.addAnimation(Animation.PLAYER2_PLAY, null);
-            play(playedCard, player2);
             playNextAnimation();
         }
     };
 
 
-    private void deal() {
-        if (!game.finished()) {
-            //***
-            if (game.handsEmpty()) {
-                game.dealCards(player1);
-                game.dealCards(player2);
-                // Show on Table
-                guiPlayer1.showCards(player1.getHand(), guiDeck, deck);
-                guiPlayer2.showCards(player2.getHand(), guiDeck, deck);
-            }
+    private boolean deal() {
+        if (!game.finished() && game.handsEmpty()) {
+            game.dealCards(player1);
+            game.dealCards(player2);
+            guiPlayer1.showCards(player1.getHand(), guiDeck, deck);
+            guiPlayer2.showCards(player2.getHand(), guiDeck, deck);
+            return true;
         }
+        return false;
+    }
+
+    private void queueMachineTurn() {
+        Card playedCard = player2.playMachine(table.getTopCardOnTable());
+        if (playedCard == null) {
+            throw new IllegalStateException("Machine has no card for its turn");
+        }
+        gui.addAnimation(Animation.PLAYER2_PLAY, null);
+        play(playedCard, player2);
     }
 
     private void playPlayerPisti(Player player){
@@ -332,7 +356,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void play(Card playedCard, Player player) {
         table.takeCard(playedCard);
-        player.addCardToMemory(playedCard);
+        game.addCardToMemoryOfPlayers(playedCard);
+        updateMemoryDisplay();
         table.setTopCardOnTable(playedCard);
 
         // Check game Rules, if it's a trick.
@@ -365,24 +390,23 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private void updateMemoryDisplay() {
+        if (BuildConfig.DEBUG) {
+            machineMemoryDebug.setText(player2.getMemorySummary());
+        }
+    }
+
     public void nextRound() {
-        game.setPlayerMadeLastTrick(null);
-        game.setTrickCount(0);
-        deck.createCards();
-        guiDeck.createCards(getApplicationContext(), deck);
-        deck.shuffleDeck();
-        game.setCardsPoints();
-        game.dealCards(table);
-        table.buildHiddenCardsString();
-        table.setTopCardOnTable(table.getTheTopCard());
-        guiTable.showCard(table.getTheTopCardsId(), guiDeck, deck);
-        guiTable.ShowHiddenCard();
-        // Every Player memorizes the top card on the table
-        game.addCardToMemoryOfPlayers(table.getTheTopCard());
-        deal();// Code here executes on main thread after user presses button
+        machineStartsRound = !machineStartsRound;
+        startRound();
     }
 
     public void newGame() {
+        machineStartsRound = false;
+        startRound();
+    }
+
+    private void startRound() {
         game.setPlayerMadeLastTrick(null);
         game.setTrickCount(0);
         deck.createCards();
@@ -396,7 +420,11 @@ public class MainActivity extends AppCompatActivity {
         guiTable.ShowHiddenCard();
         // Every Player memorizes the top card on the table
         game.addCardToMemoryOfPlayers(table.getTheTopCard());
-        deal();// Code here executes on main thread after user presses button
+        updateMemoryDisplay();
+        if (deal() && machineStartsRound) {
+            semaphoreMachine = true;
+            gui.addAnimation(Animation.OPENING_CARD_PAUSE, null);
+        }
     }
 
     public void readPreferences() {
@@ -592,8 +620,8 @@ public class MainActivity extends AppCompatActivity {
                 .setPositiveButton("CONTINUE", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
-                        nextRound();
                         gui.removeFirstAnimation();
+                        nextRound();
                         playNextAnimation();
                     }
                 }).show();
@@ -606,8 +634,8 @@ public class MainActivity extends AppCompatActivity {
                 .setPositiveButton("NEW GAME", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
-                        newGame();
                         gui.removeFirstAnimation();
+                        newGame();
                         playNextAnimation();
                     }
                 })
@@ -621,9 +649,30 @@ public class MainActivity extends AppCompatActivity {
                 }).show();
     }
 
+    private void pauseForOpeningCard() {
+        if (pendingOpeningMove != null) {
+            return;
+        }
+        pendingOpeningMove = () -> {
+            pendingOpeningMove = null;
+            if (isFinishing() || isDestroyed()) {
+                return;
+            }
+            gui.removeFirstAnimation();
+            queueMachineTurn();
+            playNextAnimation();
+        };
+        guiTable.imageTable.postDelayed(pendingOpeningMove, OPENING_CARD_PAUSE_MS);
+    }
+
     public void playNextAnimation() {
         if(gui.getAnimationSize()==0) {
-            deal();
+            // In a machine-led round it also leads each new four-card hand.
+            if (deal() && machineStartsRound) {
+                queueMachineTurn();
+                playNextAnimation();
+                return;
+            }
             semaphoreMachine = false;
             return;
         }
@@ -638,6 +687,7 @@ public class MainActivity extends AppCompatActivity {
             case SHOW_GAME_SCORE: playAnimation8(gui.getAnimationView(0)); break;
             case PLAYER1_PISTI: playAnimation9(gui.getAnimationView(0)); break;
             case PLAYER2_PISTI: playAnimation10(gui.getAnimationView(0)); break;
+            case OPENING_CARD_PAUSE: pauseForOpeningCard(); break;
         }
     }
 }

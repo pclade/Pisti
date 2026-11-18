@@ -113,22 +113,22 @@ public class Deck {
     }
 
     public boolean isJack(Card card){
-        return card.getName() == "J";
+        return "J".equals(card.getName());
     }
     public boolean isCaro(Card card){
-        return card.getSuite() == "♦";
+        return "♦".equals(card.getSuite());
     }
     public boolean isCross(Card card){
-        return card.getSuite() == "♣";
+        return "♣".equals(card.getSuite());
     }
     public boolean isTen(Card card){
-        return card.getName()=="T";
+        return "T".equals(card.getName());
     }
     public boolean isTwo(Card card){
-        return card.getName()=="2";
+        return "2".equals(card.getName());
     }
     public boolean isAs(Card card){
-        return card.getName()=="A";
+        return "A".equals(card.getName());
     }
     public Integer getDecSize(){return deckSize;}
 }
