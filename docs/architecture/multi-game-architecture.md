@@ -8,8 +8,11 @@ gewählten türkischen [24-Karten-Variante](https://tr.wikipedia.org/wiki/Altm%C
 | Git-Projekt | Module | Aufgabe |
 | --- | --- | --- |
 | `Pisti` | `:app` (Android), später `:pisti-game` (Java) | Pisti-Oberfläche, eigene Spielregeln, Wertung und Gegnerstrategie |
-| `cards-core` | Java-Bibliothek | Kartenidentität, Kartensätze, Mischen und Ziehen; keine Android- oder Spielregeln |
+| `cards-core` | Java-Bibliothek | Kartenidentität, Kartensatz-Definitionen, Mischen und Ziehen; keine Android- oder Spielregeln |
 | `altmisalti` | `:app` (Android), `:sixtysix-game` (Java) | Eigenständiges 66-Spiel mit Regeln, Wertung, Gegnerstrategie und Oberfläche |
+
+Weitere Spiele wie Briscola oder Jass erhalten bei Bedarf eigene Spielprojekte.
+Sie nutzen dieselbe Kartenbibliothek mit ihrem jeweiligen Kartensatz.
 
 Die beiden Spielprojekte hängen von `cards-core` ab. Es gibt keine Abhängigkeit
 zwischen Pisti und Altmışaltı. Der Kartenkern wird versioniert und als
@@ -36,6 +39,36 @@ Projekt darf dafür kein `project(':cards-core')` eines anderen Builds erwarten.
   Handkarten, Stichkarten und einen Trumpf/Talon. Grafiken können wiederverwendet
   werden; die Anordnung und Animationen werden pro Spiel gestaltet.
 
+## Erweiterbare Kartensätze und Motive
+
+`cards-core` wächst durch stabile Begriffe und Schnittstellen: Kartenidentität
+aus Farbe und Rang, frei definierbare Kartensätze, Ziehen und Mischen. Ein
+Kartensatz ist eine Liste von Karten, keine fest eingebaute 52er-Annahme.
+Definitionen für französische 52 und 24 Karten, italienische 40 Karten und
+Schweizer Jasskarten mit 36 Karten können als Daten oder kleine Java-Fabriken
+ergänzt werden. Spielstärke und Punktwert legt das jeweilige Regelmodul fest;
+beispielsweise ist die Drei bei Briscola stark, obwohl sie nur den Rang 3 trägt.
+
+Kartenbilder gehören nicht in die Java-Bibliothek. Ein Android-Bildpaket oder
+die jeweilige App ordnet einer logischen Kartenidentität ein Bild zu, etwa
+`italian/bastoni/asso` oder `swiss/rosen/under`. Eine kleine Schnittstelle
+`CardArtworkProvider` kann die Zuordnung für die Android-Oberflächen kapseln.
+Die heutige Pisti-Zuordnung über `c00` bis `c51` bleibt während der Migration
+als Adapter erhalten; langfristig ist eine Kartennummer keine Bildadresse.
+Ein gemeinsam genutztes Android-Bildpaket lohnt sich, sobald mehrere Apps
+tatsächlich dieselben Motive verwenden.
+
+Die drei vom Nutzer gelieferten italienischen Bögen enthalten 18 + 18 + 4
+Kartenbilder: je zehn Karten in Bastoni, Spade, Denari und Coppe (Ass, 2–7,
+Fante, Cavallo, Re). Die einzelnen Zuschnitte werden als separates Motivpaket
+mit eindeutigen Dateinamen abgelegt. Die Originalbögen bleiben erhalten.
+Jass mit Deutschschweizer oder französischen Figuren benötigt einen eigenen
+36-Karten-Satz und passende Bildzuordnungen; die Jass-Spielarten gehören
+in ein eigenes Regelmodul.
+
+Regelreferenzen: [Briscola (Modiano)](https://www.modiano.it/en/game/briscola/)
+und [Schweizer Jasskarten (Swisslos)](https://www.swisslos.ch/de/jass/informationen/jass-regeln/jass-grundlagen.html).
+
 Die Regelkerne liefern `legalActions(state)` und `apply(state, action)` sowie
 einen für den jeweiligen Spieler sichtbaren Beobachtungszustand. Eine
 Strategie-Schnittstelle wählt aus den erlaubten Aktionen. Bei 66 sind auch
@@ -49,7 +82,8 @@ festgelegt; beide Spiele müssen nicht dieselbe Zustandsklasse verwenden.
    erproben (Entwurf-PR #4).
 2. `cards-core` als eigenständige Java-Bibliothek herauslösen. Pisti bezieht
    eine festgelegte Version. Die heute noch veränderbaren Punkt- und
-   Gewichtsfelder der Karte werden dabei in die Spielregeln verlagert.
+   Gewichtsfelder der Karte werden dabei in die Spielregeln verlagert. Die
+   heute an `c00` bis `c51` gebundene Nummer wird von Bildressourcen entkoppelt.
 3. Pisti-Zugfolge und Wertung aus `MainActivity` in `:pisti-game` verschieben;
    bisherige Partien und Animationen müssen gleich funktionieren.
 4. Eigenständiges 66-Projekt mit `:sixtysix-game`, Regeltests und Android-App
@@ -57,6 +91,9 @@ festgelegt; beide Spiele müssen nicht dieselbe Zustandsklasse verwenden.
 5. Erst nach einem Vergleich beider Oberflächen gemeinsam nutzbare
    Android-Kartenbausteine gegebenenfalls in eine separate UI-Bibliothek
    auslagern.
+6. Für Briscola den italienischen 40-Karten-Satz und sein Bildpaket ergänzen;
+   die Regeln und Oberfläche bleiben in einem eigenen Spielprojekt. Jass kann
+   später den 36-Karten-Satz als weiteren Testfall einbringen.
 
 ## Qualitätsnachweise für den Unterricht
 
