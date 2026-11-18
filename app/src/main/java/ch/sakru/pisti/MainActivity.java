@@ -43,6 +43,8 @@ import java.util.ArrayList;
 //public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 public class MainActivity extends AppCompatActivity {
 
+    private static final long OPENING_CARD_PAUSE_MS = 1500L;
+
     ArrayList<ImageView> cardResourcesP1 = new ArrayList<ImageView>();
     ArrayList<ImageView> cardResourcesP2 = new ArrayList<ImageView>();
 
@@ -59,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
 
     boolean semaphoreMachine;
     boolean machineStartsRound;
+    private Runnable pendingOpeningMove;
 
     TextView textPisti;
     TextView machineMemoryDebug;
@@ -233,6 +236,15 @@ public class MainActivity extends AppCompatActivity {
         //game.setPointsToReach(11);
         //
         textPisti = (TextView) findViewById(R.id.pisti);
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (pendingOpeningMove != null && guiTable != null && guiTable.imageTable != null) {
+            guiTable.imageTable.removeCallbacks(pendingOpeningMove);
+            pendingOpeningMove = null;
+        }
+        super.onDestroy();
     }
 
     private View.OnClickListener clickListener = new View.OnClickListener() {
@@ -410,7 +422,8 @@ public class MainActivity extends AppCompatActivity {
         game.addCardToMemoryOfPlayers(table.getTheTopCard());
         updateMemoryDisplay();
         if (deal() && machineStartsRound) {
-            queueMachineTurn();
+            semaphoreMachine = true;
+            gui.addAnimation(Animation.OPENING_CARD_PAUSE, null);
         }
     }
 
@@ -636,6 +649,22 @@ public class MainActivity extends AppCompatActivity {
                 }).show();
     }
 
+    private void pauseForOpeningCard() {
+        if (pendingOpeningMove != null) {
+            return;
+        }
+        pendingOpeningMove = () -> {
+            pendingOpeningMove = null;
+            if (isFinishing() || isDestroyed()) {
+                return;
+            }
+            gui.removeFirstAnimation();
+            queueMachineTurn();
+            playNextAnimation();
+        };
+        guiTable.imageTable.postDelayed(pendingOpeningMove, OPENING_CARD_PAUSE_MS);
+    }
+
     public void playNextAnimation() {
         if(gui.getAnimationSize()==0) {
             // In a machine-led round it also leads each new four-card hand.
@@ -658,6 +687,7 @@ public class MainActivity extends AppCompatActivity {
             case SHOW_GAME_SCORE: playAnimation8(gui.getAnimationView(0)); break;
             case PLAYER1_PISTI: playAnimation9(gui.getAnimationView(0)); break;
             case PLAYER2_PISTI: playAnimation10(gui.getAnimationView(0)); break;
+            case OPENING_CARD_PAUSE: pauseForOpeningCard(); break;
         }
     }
 }
