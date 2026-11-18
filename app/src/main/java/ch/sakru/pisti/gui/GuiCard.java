@@ -6,27 +6,12 @@ import android.animation.ObjectAnimator;
 import android.view.View;
 
 public class GuiCard {
-    private float saveX;
-    private float saveY;
-    private ObjectAnimator xAnim;
-    private ObjectAnimator yAnim;
+    private AnimatorSet cardAnimation;
     private View sourceView;
 
     public GuiCard() {
     }
 
-    public void setSaveX(float saveX) {
-        this.saveX = saveX;
-    }
-    public float getSaveX() {
-        return saveX;
-    }
-    public void setSaveY(float saveY) {
-        this.saveY = saveY;
-    }
-    public float getSaveY() {
-        return saveY;
-    }
     public View getSourceView() {
         return this.sourceView;
     }
@@ -34,26 +19,27 @@ public class GuiCard {
     public void initAnimation(View sourceView, View destinationView) {
         this.sourceView = sourceView;
         this.sourceView.bringToFront();
-        saveX = sourceView.getX();
-        saveY = sourceView.getY();
-        xAnim = ObjectAnimator.ofFloat(sourceView, "translationX", destinationView.getX() - sourceView.getX());
-        yAnim = ObjectAnimator.ofFloat(sourceView, "translationY", destinationView.getY() - sourceView.getY());
+        restoreCardPositions();
+        ObjectAnimator xAnim = ObjectAnimator.ofFloat(sourceView, View.TRANSLATION_X,
+                0f, destinationView.getX() - sourceView.getX());
+        ObjectAnimator yAnim = ObjectAnimator.ofFloat(sourceView, View.TRANSLATION_Y,
+                0f, destinationView.getY() - sourceView.getY());
+        cardAnimation = new AnimatorSet();
+        cardAnimation.playTogether(xAnim, yAnim);
+        cardAnimation.setDuration(500);
     }
 
     public void restoreCardPositions() {
-        sourceView.setX(saveX);
-        sourceView.setY(saveY);
+        sourceView.setTranslationX(0f);
+        sourceView.setTranslationY(0f);
     }
 
     public void doAnimation() {
-        AnimatorSet cardPlayer = new AnimatorSet();
-        cardPlayer.play(xAnim).with(yAnim);
-        cardPlayer.setDuration(500);
-        cardPlayer.start();
+        cardAnimation.start();
     }
 
     public void addListener(AnimatorListenerAdapter animatorListenerAdapter) {
-      yAnim.addListener(animatorListenerAdapter);
+      cardAnimation.addListener(animatorListenerAdapter);
     }
 
 }
