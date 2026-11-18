@@ -119,7 +119,7 @@ public class Game {
     public boolean isItAPisti(Player table){
         int maxCardOnTable = table.getHand().size();
         if(maxCardOnTable == 2){
-            if(table.getHand().get(maxCardOnTable-1).getName() == table.getHand().get(maxCardOnTable-2).getName()){
+            if(table.getHand().get(maxCardOnTable-1).getName().equals(table.getHand().get(maxCardOnTable-2).getName())){
                 table.setTopCardOnTable(null);
                 return true;
             }
@@ -138,7 +138,7 @@ public class Game {
               return true;
           }
           else
-          if(table.getHand().get(maxCardOnTable-1).getName() == table.getHand().get(maxCardOnTable-2).getName()){
+          if(table.getHand().get(maxCardOnTable-1).getName().equals(table.getHand().get(maxCardOnTable-2).getName())){
               table.setTopCardOnTable(null);
               return true;
           }

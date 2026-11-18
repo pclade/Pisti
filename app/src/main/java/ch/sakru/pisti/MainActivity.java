@@ -332,7 +332,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void play(Card playedCard, Player player) {
         table.takeCard(playedCard);
-        player.addCardToMemory(playedCard);
+        game.addCardToMemoryOfPlayers(playedCard);
         table.setTopCardOnTable(playedCard);
 
         // Check game Rules, if it's a trick.
