@@ -15,7 +15,7 @@ public class Table extends Player{
     }
 
     public Integer getTheTopCardsId(){
-        return getTheTopCard().getCardNumber();
+        return getTheTopCard().getId();
     }
 
     public String getHiddenCardsString(){
@@ -24,7 +24,7 @@ public class Table extends Player{
     public void buildHiddenCardsString(){
         strHiddenCards = "";
         for(Integer i=0; i<3;i++){
-            strHiddenCards += getHand().get(i).getSuite()+getHand().get(i).getName()+" ";
+            strHiddenCards += getHand().get(i).getSuit()+getHand().get(i).getRank()+" ";
         }
     }
 

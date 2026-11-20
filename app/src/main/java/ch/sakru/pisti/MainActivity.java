@@ -434,7 +434,6 @@ public class MainActivity extends AppCompatActivity {
         deck.createCards();
         guiDeck.createCards(getApplicationContext(), deck);
         deck.shuffleDeck();
-        game.setCardsPoints();
         game.dealCards(table);
         table.buildHiddenCardsString();
         table.setTopCardOnTable(table.getTheTopCard());
@@ -541,7 +540,7 @@ public class MainActivity extends AppCompatActivity {
                 guiPlayer1.restoreCardPositions();
                 Integer cardNrInHand = guiPlayer1.getCardNrFromView((ImageView) view);
                 Card playedCard = player1.getPlayedCard();
-                Integer cardNr = playedCard.getCardNumber();
+                Integer cardNr = playedCard.getId();
                 guiTable.showCard(cardNr, guiDeck, deck);
                 guiPlayer1.cardImages.get(cardNrInHand).setImageResource(android.R.color.transparent);
                 gui.removeFirstAnimation();
@@ -555,13 +554,13 @@ public class MainActivity extends AppCompatActivity {
     private void playAnimation2(View view) {
         Integer cardNr = player2.getPlayedCardNrInHand();
         Card playedCard = player2.getPlayedCard();
-        guiPlayer2.showCard(cardNr, playedCard.getCardNumber(), guiDeck, deck);
+        guiPlayer2.showCard(cardNr, playedCard.getId(), guiDeck, deck);
         guiPlayer2.initAnimation(guiPlayer2.cardImages.get(cardNr), guiTable.imageTable);
         animatorListenerAdapter = new AnimatorListenerAdapter() {
             public void onAnimationEnd(Animator animation) {
                 guiPlayer2.restoreCardPositions();
                 ImageView view = guiPlayer2.cardImages.get(player2.getPlayedCardNrInHand());
-                guiTable.showCard(player2.getPlayedCard().getCardNumber(), guiDeck, deck);
+                guiTable.showCard(player2.getPlayedCard().getId(), guiDeck, deck);
                 view.setImageResource(android.R.color.transparent);
                 gui.removeFirstAnimation();
                 playNextAnimation();

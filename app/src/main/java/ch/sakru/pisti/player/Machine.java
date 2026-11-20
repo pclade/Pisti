@@ -50,19 +50,19 @@ public class Machine extends Player {
     @Override
     public void addCardToMemory(Card card){
         if (card != null) {
-            memoryOfCards.put(card.getCardNumber(), card);
+            memoryOfCards.put(card.getId(), card);
         }
     }
 
     private int getAmountOfCardNameInMemory(Card card){
         int count = 0;
         for (Card knownCard : memoryOfCards.values()) {
-            if (card.getName().equals(knownCard.getName())) {
+            if (card.getRank().equals(knownCard.getRank())) {
                 count++;
             }
         }
         for (Card handCard : getHand()) {
-            if (handCard != null && card.getName().equals(handCard.getName())) {
+            if (handCard != null && card.getRank().equals(handCard.getRank())) {
                 count++;
             }
         }
@@ -74,7 +74,7 @@ public class Machine extends Player {
         int[] counts = new int[RANKS.length];
         for (Card knownCard : memoryOfCards.values()) {
             for (int i = 0; i < RANKS.length; i++) {
-                if (RANKS[i].equals(knownCard.getName())) {
+                if (RANKS[i].equals(knownCard.getRank())) {
                     counts[i]++;
                     break;
                 }
@@ -97,7 +97,7 @@ public class Machine extends Player {
         int bestCount = -1;
         for (int i = 0; i < getHand().size(); i++) {
             Card card = getHand().get(i);
-            if (card != null && !"J".equals(card.getName())) {
+            if (card != null && !"J".equals(card.getRank())) {
                 int count = getAmountOfCardNameInMemory(card);
                 if (count > bestCount) {
                     bestIndex = i;
@@ -119,7 +119,7 @@ public class Machine extends Player {
         Card cardToPlay = null;
         for (Integer i = 0; i < getHand().size(); i++) {
             Card card = getHand().get(i);
-            if ((card != null) && (!"J".equals(card.getName()))) {
+            if ((card != null) && (!"J".equals(card.getRank()))) {
                 setPlayedCardInHand(i);
                 cardToPlay = card;
                 setPlayedCard(cardToPlay);
@@ -148,7 +148,7 @@ public class Machine extends Player {
         Card cardToPlay = null;
         for(Integer i=0; i< getHand().size();i++) {
             Card card = getHand().get(i);
-            if ((card != null) && card.getName().equals(topCardOnTable.getName())) {
+            if ((card != null) && card.getRank().equals(topCardOnTable.getRank())) {
                 cardToPlay = card;
                 setPlayedCardInHand(i);
                 setPlayedCard(cardToPlay);
@@ -164,7 +164,7 @@ public class Machine extends Player {
             return null;
         for(Integer i=0; i< getHand().size();i++) {
             cardToPlay = getHand().get(i);
-            if ((cardToPlay!= null) && "J".equals(cardToPlay.getName())) {
+            if ((cardToPlay!= null) && "J".equals(cardToPlay.getRank())) {
                 setPlayedCardInHand(i);
                 setPlayedCard(cardToPlay);
                 return cardToPlay;

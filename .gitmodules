@@ -1,0 +1,3 @@
+[submodule "cards-core"]
+	path = vendor/cards-core
+	url = https://github.com/pclade/cards-core.git

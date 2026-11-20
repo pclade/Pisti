@@ -119,7 +119,7 @@ public class Game {
     public boolean isItAPisti(Player table){
         int maxCardOnTable = table.getHand().size();
         if(maxCardOnTable == 2){
-            if(table.getHand().get(maxCardOnTable-1).getName().equals(table.getHand().get(maxCardOnTable-2).getName())){
+            if(table.getHand().get(maxCardOnTable-1).getRank().equals(table.getHand().get(maxCardOnTable-2).getRank())){
                 table.setTopCardOnTable(null);
                 return true;
             }
@@ -133,12 +133,12 @@ public class Game {
     public boolean isItATrick(Player table){
         int maxCardOnTable = table.getHand().size();
         if(maxCardOnTable >= 2){
-          if("J".equals(table.getHand().get(maxCardOnTable-1).getName())){
+          if("J".equals(table.getHand().get(maxCardOnTable-1).getRank())){
               table.setTopCardOnTable(null);
               return true;
           }
           else
-          if(table.getHand().get(maxCardOnTable-1).getName().equals(table.getHand().get(maxCardOnTable-2).getName())){
+          if(table.getHand().get(maxCardOnTable-1).getRank().equals(table.getHand().get(maxCardOnTable-2).getRank())){
               table.setTopCardOnTable(null);
               return true;
           }
@@ -227,28 +227,6 @@ public class Game {
     }
     public Player getPlayerMadeLastTrick(){return playerMadeLastTrick;}
 
-    public void setCardsPoints(){
-      Integer amountOfCards = deck.getDecSize();
-      for(Integer i=0; i< amountOfCards; i++) {
-          Card card = deck.getCardDeck().get(i);
-          if("♦".equals(card.getSuite()) && "T".equals(card.getName())){
-              card.setPoint(3);
-          }
-          else
-          if("♣".equals(card.getSuite()) && "2".equals(card.getName())){
-              card.setPoint(2);
-          }
-          else
-          if("A".equals(card.getName())){
-              card.setPoint(1);
-          }
-          else
-          if("J".equals(card.getName())){
-              card.setPoint(1);
-          }
-      }
-    }
-
     public void addCardToMemoryOfPlayers(Card card){
         for(Integer i=0; i< getNumberOfPlayers(); i++) {
             Player player = players.get(i);
@@ -277,8 +255,8 @@ public class Game {
             strScore += strTitlePoints+strDoublePoint;
             for (Integer c = 0; c < player.getWinners().size(); c++) {
                 Card card = player.getWinners().get(c);
-                if (card.getPoint() > 0) {
-                    strScore += card.getSuite() + card.getName();
+                if (PistiScoring.pointsFor(card) > 0) {
+                    strScore += card.getSuit() + card.getRank();
                 }
             }
             if (player.isThreePointsWinner()) {

@@ -1,6 +1,7 @@
 package ch.sakru.pisti.player;
 
 import ch.sakru.cards.Card;
+import ch.sakru.pisti.game.PistiScoring;
 
 import java.util.ArrayList;
 
@@ -116,7 +117,7 @@ public class Player {
     public void calcCardPoints() {
         for (int i = 0; i < winnerCards.size(); i++) {
             Card card = winnerCards.get(i);
-            points += card.getPoint();
+            points += PistiScoring.pointsFor(card);
         }
     }
 

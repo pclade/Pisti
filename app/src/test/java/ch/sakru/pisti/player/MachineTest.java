@@ -10,9 +10,7 @@ import static org.junit.Assert.assertSame;
 
 public class MachineTest {
     private static Card card(int number, String name) {
-        Card card = new Card(number);
-        card.setName(name);
-        return card;
+        return new Card(number, name, "♠");
     }
 
     @Test
