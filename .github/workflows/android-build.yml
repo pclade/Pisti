@@ -25,4 +25,4 @@ jobs:
           packages: 'platform-tools platforms;android-36 build-tools;36.0.0'
       - uses: gradle/actions/setup-gradle@v6
       - name: Test and assemble
-        run: ./gradlew :cards-core:test testDebugUnitTest assembleDebug
+        run: bash ./gradlew :cards-core:test testDebugUnitTest assembleDebug
