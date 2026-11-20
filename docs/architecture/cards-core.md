@@ -30,6 +30,12 @@ git submodule update --init --recursive
 .\gradlew.bat :cards-core:test testDebugUnitTest assembleDebug
 ```
 
+Der Gradle-Daemon verwendet die Java-Installation aus `JAVA_HOME` bzw. die in
+Android Studio ausgewählte Gradle-JDK. JDK 17 oder neuer ist für das verwendete
+Android-Plugin erforderlich; ein bestimmter Hersteller und JDK 25 sind für
+Pisti nicht nötig. Die Java-Quellen von App und Bibliothek bleiben auf Java 8
+ausgerichtet. Wer JDK 25 installiert hat, kann es weiterhin verwenden.
+
 Bei einem neuen Checkout: `git clone --recurse-submodules
 https://github.com/pclade/Pisti.git`. Änderungen am Kartenkern werden in
 seinem eigenen Repository committed; Pisti übernimmt eine neue Version erst,
