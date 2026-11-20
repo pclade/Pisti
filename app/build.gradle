@@ -34,7 +34,7 @@ android {
 }
 
 dependencies {
-    implementation project(':cards-core')
+    implementation 'ch.sakru:cards-core:0.1.0'
 
     implementation 'androidx.appcompat:appcompat:1.7.1'
     implementation 'com.google.android.material:material:1.13.0'

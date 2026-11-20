@@ -3,6 +3,7 @@ package ch.sakru.pisti.gui;
 import android.content.Context;
 import android.widget.ImageView;
 
+import ch.sakru.cards.Card;
 import ch.sakru.cards.Deck;
 
 import java.util.ArrayList;
@@ -25,8 +26,9 @@ public class GuiDeck {
         for(int i = 0; i < deck.getDecSize(); i++){
             ImageView cardImage = new ImageView(context);
             int cardID;
-            int cardNr = deck.getCardDeck().get(i).getCardNumber();
-            String cardName = "c" + String.format("%02d",cardNr);
+            Card card = deck.getCardDeck().get(i);
+            int cardNr = card.getId();
+            String cardName = PistiArtwork.drawableName(card);
             cardID = context.getResources().getIdentifier(cardName, "drawable", context.getPackageName());
             cardImage.setImageResource(cardID);
             cardImages.add(cardImage);

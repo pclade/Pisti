@@ -1,7 +1,9 @@
 package ch.sakru.pisti.game;
 
 import ch.sakru.cards.Card;
+import ch.sakru.cards.CardSet;
 import ch.sakru.cards.Deck;
+import ch.sakru.pisti.player.Player;
 import ch.sakru.pisti.player.Table;
 import org.junit.Test;
 
@@ -11,10 +13,7 @@ import static org.junit.Assert.assertTrue;
 
 public class GameRulesTest {
     private static Card card(int number, String name, String suite) {
-        Card card = new Card(number);
-        card.setName(name);
-        card.setSuite(suite);
-        return card;
+        return new Card(number, name, suite);
     }
 
     @Test
@@ -41,20 +40,26 @@ public class GameRulesTest {
 
     @Test
     public void specialCardsScoreWithDynamicallyCreatedNamesAndSuits() {
-        Deck deck = new Deck();
+        Card diamondTen = card(35, new String("T"), new String("♦"));
+        Card clubTwo = card(40, new String("2"), new String("♣"));
+        Player winner = new Player();
+        winner.getWinners().add(diamondTen);
+        winner.getWinners().add(clubTwo);
+
+        assertEquals(3, PistiScoring.pointsFor(diamondTen));
+        assertEquals(2, PistiScoring.pointsFor(clubTwo));
+        winner.calcCardPoints();
+        assertEquals(Integer.valueOf(5), winner.getPoints());
+    }
+
+    @Test
+    public void completeFrenchDeckRetainsThirteenPistiCardPoints() {
+        Deck deck = new Deck(CardSet.french52());
         deck.createCards();
-        Card diamondTen = deck.getCardDeck().get(35);
-        diamondTen.setSuite(new String("♦"));
-        diamondTen.setName(new String("T"));
-        Card clubTwo = deck.getCardDeck().get(40);
-        clubTwo.setSuite(new String("♣"));
-        clubTwo.setName(new String("2"));
-
-        Game game = new Game();
-        game.setDeck(deck);
-        game.setCardsPoints();
-
-        assertEquals(Integer.valueOf(3), diamondTen.getPoint());
-        assertEquals(Integer.valueOf(2), clubTwo.getPoint());
+        int total = 0;
+        for (Card card : deck.getCardDeck()) {
+            total += PistiScoring.pointsFor(card);
+        }
+        assertEquals(13, total);
     }
 }

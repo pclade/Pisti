@@ -1,6 +1,6 @@
 # Pisti und Altmışaltı: Zielarchitektur
 
-Status: Architekturvorschlag, 18.11.2026. Altmışaltı folgt der vom Nutzer
+Status: Architekturvorschlag, aktualisiert 20.11.2026. Altmışaltı folgt der vom Nutzer
 gewählten türkischen [24-Karten-Variante](https://tr.wikipedia.org/wiki/Altm%C4%B1%C5%9Falt%C4%B1).
 
 ## Projekte und Abhängigkeiten
@@ -15,11 +15,12 @@ Weitere Spiele wie Briscola oder Jass erhalten bei Bedarf eigene Spielprojekte.
 Sie nutzen dieselbe Kartenbibliothek mit ihrem jeweiligen Kartensatz.
 
 Die beiden Spielprojekte hängen von `cards-core` ab. Es gibt keine Abhängigkeit
-zwischen Pisti und Altmışaltı. Der Kartenkern wird versioniert und als
-Bibliothek bezogen. Für die gleichzeitige lokale Entwicklung separater
-Gradle-Builds kann ein [Composite Build](https://docs.gradle.org/current/userguide/composite_builds.html)
-die veröffentlichte Bibliothek durch ihren lokalen Quellcode ersetzen. Ein
-Projekt darf dafür kein `project(':cards-core')` eines anderen Builds erwarten.
+zwischen Pisti und Altmışaltı. Der Kartenkern ist ein separates Repository;
+Pisti bezieht ihn über ein auf einen Commit gepinntes Git-Submodul und einen
+[Composite Build](https://docs.gradle.org/current/userguide/composite_builds.html).
+Der Gradle-Name und die Maven-Koordinate `ch.sakru:cards-core:0.1.0` sind
+festgelegt, doch eine Veröffentlichung auf einem Paketserver steht noch aus.
+Ein zweites Spiel kann dasselbe Repository mit eigenem Submodul-Pin verwenden.
 
 ## Verantwortlichkeiten
 
@@ -81,9 +82,9 @@ festgelegt; beide Spiele müssen nicht dieselbe Zustandsklasse verwenden.
 1. Pisti-Verhalten mit Tests absichern und `:cards-core` im Pisti-Projekt
    erproben (Entwurf-PR #4).
 2. `cards-core` als eigenständige Java-Bibliothek herauslösen. Pisti bezieht
-   eine festgelegte Version. Die heute noch veränderbaren Punkt- und
-   Gewichtsfelder der Karte werden dabei in die Spielregeln verlagert. Die
-   heute an `c00` bis `c51` gebundene Nummer wird von Bildressourcen entkoppelt.
+   einen festgelegten Commit über Git-Submodul und Composite Build. Punkt- und
+   Gewichtsfelder entfallen; die Pisti-Punkte liegen in `PistiScoring`.
+   `PistiArtwork` ordnet Farben und Ränge den bestehenden Bildern zu.
 3. Pisti-Zugfolge und Wertung aus `MainActivity` in `:pisti-game` verschieben;
    bisherige Partien und Animationen müssen gleich funktionieren.
 4. Eigenständiges 66-Projekt mit `:sixtysix-game`, Regeltests und Android-App

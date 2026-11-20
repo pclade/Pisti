@@ -32,7 +32,7 @@ public class GuiPlayer {
 
     public void showCards(ArrayList<Card> hand, GuiDeck guiDeck, Deck deck){
         for(Integer i=0; i<amountOfCards;i++) {
-            Integer cardNrInHand = hand.get(i).getCardNumber();
+            Integer cardNrInHand = hand.get(i).getId();
             ImageView ivOfCardInHand = cardImages.get(i);
             //DEBUG:
             //hideCards = false;
